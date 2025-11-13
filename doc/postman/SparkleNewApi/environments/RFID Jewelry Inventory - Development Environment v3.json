@@ -1,0 +1,1037 @@
+{
+  "name": "RFID Jewelry Inventory - Development Environment v3",
+  "variables": {
+    "baseUrl": {
+      "value": "https://localhost:7107",
+      "type": "string",
+      "id": 0,
+      "isSecret": false
+    },
+    "authToken": {
+      "value": "",
+      "type": "string",
+      "id": 1,
+      "isSecret": true
+    },
+    "clientCode": {
+      "value": "",
+      "type": "string",
+      "id": 2,
+      "isSecret": false
+    },
+    "userId": {
+      "value": "",
+      "type": "string",
+      "id": 3,
+      "isSecret": false
+    },
+    "productId": {
+      "value": "",
+      "type": "string",
+      "id": 4,
+      "isSecret": false
+    },
+    "imageId": {
+      "value": "",
+      "type": "string",
+      "id": 5,
+      "isSecret": false
+    },
+    "testUsername": {
+      "value": "admin@jewelrystore.com",
+      "type": "string",
+      "id": 6,
+      "isSecret": false
+    },
+    "testPassword": {
+      "value": "Admin@123",
+      "type": "string",
+      "id": 7,
+      "isSecret": true
+    },
+    "testFullName": {
+      "value": "John Doe",
+      "type": "string",
+      "id": 8,
+      "isSecret": false
+    },
+    "testMobileNumber": {
+      "value": "+91-9876543210",
+      "type": "string",
+      "id": 9,
+      "isSecret": false
+    },
+    "testCity": {
+      "value": "Mumbai",
+      "type": "string",
+      "id": 10,
+      "isSecret": false
+    },
+    "testAddress": {
+      "value": "123 Jewelry Street, Mumbai, Maharashtra, India",
+      "type": "string",
+      "id": 11,
+      "isSecret": false
+    },
+    "testOrganisationName": {
+      "value": "Premium Jewelry Store",
+      "type": "string",
+      "id": 12,
+      "isSecret": false
+    },
+    "testShowroomType": {
+      "value": "Premium",
+      "type": "string",
+      "id": 13,
+      "isSecret": false
+    },
+    "testItemCode": {
+      "value": "GOLD001",
+      "type": "string",
+      "id": 14,
+      "isSecret": false
+    },
+    "testCategoryName": {
+      "value": "Rings",
+      "type": "string",
+      "id": 15,
+      "isSecret": false
+    },
+    "testBranchName": {
+      "value": "Main Branch",
+      "type": "string",
+      "id": 16,
+      "isSecret": false
+    },
+    "testCounterName": {
+      "value": "Counter 1",
+      "type": "string",
+      "id": 17,
+      "isSecret": false
+    },
+    "testProductName": {
+      "value": "Diamond Ring",
+      "type": "string",
+      "id": 18,
+      "isSecret": false
+    },
+    "testDesignName": {
+      "value": "Classic",
+      "type": "string",
+      "id": 19,
+      "isSecret": false
+    },
+    "testPurityName": {
+      "value": "18K",
+      "type": "string",
+      "id": 20,
+      "isSecret": false
+    },
+    "testRfidCode": {
+      "value": "RFID001",
+      "type": "string",
+      "id": 21,
+      "isSecret": false
+    },
+    "testGrossWeight": {
+      "value": "5.5",
+      "type": "string",
+      "id": 22,
+      "isSecret": false
+    },
+    "testNetWeight": {
+      "value": "4.8",
+      "type": "string",
+      "id": 23,
+      "isSecret": false
+    },
+    "testStoneWeight": {
+      "value": "0.5",
+      "type": "string",
+      "id": 24,
+      "isSecret": false
+    },
+    "testDiamondHeight": {
+      "value": "2.5",
+      "type": "string",
+      "id": 25,
+      "isSecret": false
+    },
+    "testBoxDetails": {
+      "value": "Premium velvet box",
+      "type": "string",
+      "id": 26,
+      "isSecret": false
+    },
+    "testSize": {
+      "value": "18",
+      "type": "string",
+      "id": 27,
+      "isSecret": false
+    },
+    "testStoneAmount": {
+      "value": "15000",
+      "type": "string",
+      "id": 28,
+      "isSecret": false
+    },
+    "testDiamondAmount": {
+      "value": "25000",
+      "type": "string",
+      "id": 29,
+      "isSecret": false
+    },
+    "testHallmarkAmount": {
+      "value": "500",
+      "type": "string",
+      "id": 30,
+      "isSecret": false
+    },
+    "testMakingPerGram": {
+      "value": "100",
+      "type": "string",
+      "id": 31,
+      "isSecret": false
+    },
+    "testMakingPercentage": {
+      "value": "15",
+      "type": "string",
+      "id": 32,
+      "isSecret": false
+    },
+    "testMakingFixedAmount": {
+      "value": "2000",
+      "type": "string",
+      "id": 33,
+      "isSecret": false
+    },
+    "testMrp": {
+      "value": "65000",
+      "type": "string",
+      "id": 34,
+      "isSecret": false
+    },
+    "testStatus": {
+      "value": "Active",
+      "type": "string",
+      "id": 35,
+      "isSecret": false
+    },
+    "testImageType": {
+      "value": "Primary",
+      "type": "string",
+      "id": 36,
+      "isSecret": false
+    },
+    "testDisplayOrder": {
+      "value": "1",
+      "type": "string",
+      "id": 37,
+      "isSecret": false
+    },
+    "testEpcValue": {
+      "value": "RFID001",
+      "type": "string",
+      "id": 38,
+      "isSecret": false
+    },
+    "testMinPrice": {
+      "value": "50000",
+      "type": "string",
+      "id": 39,
+      "isSecret": false
+    },
+    "testMaxPrice": {
+      "value": "100000",
+      "type": "string",
+      "id": 40,
+      "isSecret": false
+    },
+    "testUpdatedMrp": {
+      "value": "70000",
+      "type": "string",
+      "id": 41,
+      "isSecret": false
+    },
+    "testUpdatedBoxDetails": {
+      "value": "Updated premium velvet box with certificate",
+      "type": "string",
+      "id": 42,
+      "isSecret": false
+    },
+    "testUpdatedFullName": {
+      "value": "John Doe Updated",
+      "type": "string",
+      "id": 43,
+      "isSecret": false
+    },
+    "testUpdatedMobileNumber": {
+      "value": "+91-9876543211",
+      "type": "string",
+      "id": 44,
+      "isSecret": false
+    },
+    "testUpdatedCity": {
+      "value": "Pune",
+      "type": "string",
+      "id": 45,
+      "isSecret": false
+    },
+    "testUpdatedAddress": {
+      "value": "456 Updated Street, Pune, Maharashtra, India",
+      "type": "string",
+      "id": 46,
+      "isSecret": false
+    },
+    "testUpdatedOrganisationName": {
+      "value": "Premium Jewelry Store Updated",
+      "type": "string",
+      "id": 47,
+      "isSecret": false
+    },
+    "testUpdatedEpcValue": {
+      "value": "RFID001_UPDATED",
+      "type": "string",
+      "id": 48,
+      "isSecret": false
+    },
+    "testBulkItemCode1": {
+      "value": "JWL003",
+      "type": "string",
+      "id": 49,
+      "isSecret": false
+    },
+    "testBulkCategoryName1": {
+      "value": "Earrings",
+      "type": "string",
+      "id": 50,
+      "isSecret": false
+    },
+    "testBulkProductName1": {
+      "value": "Diamond Earrings",
+      "type": "string",
+      "id": 51,
+      "isSecret": false
+    },
+    "testBulkDesignName1": {
+      "value": "Modern",
+      "type": "string",
+      "id": 52,
+      "isSecret": false
+    },
+    "testBulkRfidCode1": {
+      "value": "RFID003",
+      "type": "string",
+      "id": 53,
+      "isSecret": false
+    },
+    "testBulkMrp1": {
+      "value": "45000",
+      "type": "string",
+      "id": 54,
+      "isSecret": false
+    },
+    "testBulkItemCode2": {
+      "value": "JWL004",
+      "type": "string",
+      "id": 55,
+      "isSecret": false
+    },
+    "testBulkCategoryName2": {
+      "value": "Bracelets",
+      "type": "string",
+      "id": 56,
+      "isSecret": false
+    },
+    "testBulkProductName2": {
+      "value": "Gold Bracelet",
+      "type": "string",
+      "id": 57,
+      "isSecret": false
+    },
+    "testBulkDesignName2": {
+      "value": "Traditional",
+      "type": "string",
+      "id": 58,
+      "isSecret": false
+    },
+    "testBulkRfidCode2": {
+      "value": "RFID004",
+      "type": "string",
+      "id": 59,
+      "isSecret": false
+    },
+    "testBulkMrp2": {
+      "value": "55000",
+      "type": "string",
+      "id": 60,
+      "isSecret": false
+    },
+    "testNewRfidCode": {
+      "value": "RFID005",
+      "type": "string",
+      "id": 61,
+      "isSecret": false
+    },
+    "testNewEpcValue": {
+      "value": "RFID005",
+      "type": "string",
+      "id": 62,
+      "isSecret": false
+    },
+    "testImageIds": {
+      "value": "[1, 2, 3]",
+      "type": "string",
+      "id": 63,
+      "isSecret": false
+    },
+    "testSecondaryImageType": {
+      "value": "Secondary",
+      "type": "string",
+      "id": 64,
+      "isSecret": false
+    },
+    "testSecondaryDisplayOrder": {
+      "value": "2",
+      "type": "string",
+      "id": 65,
+      "isSecret": false
+    },
+    "testThumbnailImageType": {
+      "value": "Thumbnail",
+      "type": "string",
+      "id": 66,
+      "isSecret": false
+    },
+    "testThumbnailDisplayOrder": {
+      "value": "3",
+      "type": "string",
+      "id": 67,
+      "isSecret": false
+    },
+    "testInvoiceNumber": {
+      "value": "INV001",
+      "type": "string",
+      "id": 68,
+      "isSecret": false
+    },
+    "testSellingPrice": {
+      "value": "60000",
+      "type": "string",
+      "id": 69,
+      "isSecret": false
+    },
+    "testDiscountAmount": {
+      "value": "5000",
+      "type": "string",
+      "id": 70,
+      "isSecret": false
+    },
+    "testFinalAmount": {
+      "value": "55000",
+      "type": "string",
+      "id": 71,
+      "isSecret": false
+    },
+    "testInvoiceType": {
+      "value": "Sale",
+      "type": "string",
+      "id": 72,
+      "isSecret": false
+    },
+    "testCustomerName": {
+      "value": "Jane Smith",
+      "type": "string",
+      "id": 73,
+      "isSecret": false
+    },
+    "testCustomerPhone": {
+      "value": "+91-9876543212",
+      "type": "string",
+      "id": 74,
+      "isSecret": false
+    },
+    "testCustomerAddress": {
+      "value": "789 Customer Street, Delhi, India",
+      "type": "string",
+      "id": 75,
+      "isSecret": false
+    },
+    "testPaymentMethod": {
+      "value": "Card",
+      "type": "string",
+      "id": 76,
+      "isSecret": false
+    },
+    "testPaymentReference": {
+      "value": "TXN123456",
+      "type": "string",
+      "id": 77,
+      "isSecret": false
+    },
+    "testInvoiceRemarks": {
+      "value": "Premium customer - special discount applied",
+      "type": "string",
+      "id": 78,
+      "isSecret": false
+    },
+    "testMovementType": {
+      "value": "Addition",
+      "type": "string",
+      "id": 79,
+      "isSecret": false
+    },
+    "testQuantity": {
+      "value": "1",
+      "type": "string",
+      "id": 80,
+      "isSecret": false
+    },
+    "testUnitPrice": {
+      "value": "65000",
+      "type": "string",
+      "id": 81,
+      "isSecret": false
+    },
+    "testTotalAmount": {
+      "value": "65000",
+      "type": "string",
+      "id": 82,
+      "isSecret": false
+    },
+    "testReferenceNumber": {
+      "value": "REF001",
+      "type": "string",
+      "id": 83,
+      "isSecret": false
+    },
+    "testReferenceType": {
+      "value": "Invoice",
+      "type": "string",
+      "id": 84,
+      "isSecret": false
+    },
+    "testMovementRemarks": {
+      "value": "Initial stock addition",
+      "type": "string",
+      "id": 85,
+      "isSecret": false
+    },
+    "testBalanceDate": {
+      "value": "2024-01-15",
+      "type": "string",
+      "id": 86,
+      "isSecret": false
+    },
+    "testOpeningQuantity": {
+      "value": "0",
+      "type": "string",
+      "id": 87,
+      "isSecret": false
+    },
+    "testClosingQuantity": {
+      "value": "1",
+      "type": "string",
+      "id": 88,
+      "isSecret": false
+    },
+    "testAddedQuantity": {
+      "value": "1",
+      "type": "string",
+      "id": 89,
+      "isSecret": false
+    },
+    "testSoldQuantity": {
+      "value": "0",
+      "type": "string",
+      "id": 90,
+      "isSecret": false
+    },
+    "testReturnedQuantity": {
+      "value": "0",
+      "type": "string",
+      "id": 91,
+      "isSecret": false
+    },
+    "testTransferredInQuantity": {
+      "value": "0",
+      "type": "string",
+      "id": 92,
+      "isSecret": false
+    },
+    "testTransferredOutQuantity": {
+      "value": "0",
+      "type": "string",
+      "id": 93,
+      "isSecret": false
+    },
+    "testOpeningValue": {
+      "value": "0",
+      "type": "string",
+      "id": 94,
+      "isSecret": false
+    },
+    "testClosingValue": {
+      "value": "65000",
+      "type": "string",
+      "id": 95,
+      "isSecret": false
+    },
+    "testAddedValue": {
+      "value": "65000",
+      "type": "string",
+      "id": 96,
+      "isSecret": false
+    },
+    "testSoldValue": {
+      "value": "0",
+      "type": "string",
+      "id": 97,
+      "isSecret": false
+    },
+    "testReturnedValue": {
+      "value": "0",
+      "type": "string",
+      "id": 98,
+      "isSecret": false
+    },
+    "testStartDate": {
+      "value": "2024-01-01",
+      "type": "string",
+      "id": 99,
+      "isSecret": false
+    },
+    "testEndDate": {
+      "value": "2024-01-31",
+      "type": "string",
+      "id": 100,
+      "isSecret": false
+    },
+    "testBranchId": {
+      "value": "1",
+      "type": "string",
+      "id": 101,
+      "isSecret": false
+    },
+    "testCounterId": {
+      "value": "1",
+      "type": "string",
+      "id": 102,
+      "isSecret": false
+    },
+    "testCategoryId": {
+      "value": "1",
+      "type": "string",
+      "id": 103,
+      "isSecret": false
+    },
+    "testInvoiceId": {
+      "value": "1",
+      "type": "string",
+      "id": 104,
+      "isSecret": false
+    },
+    "testStockMovementId": {
+      "value": "1",
+      "type": "string",
+      "id": 105,
+      "isSecret": false
+    },
+    "testDailyStockBalanceId": {
+      "value": "1",
+      "type": "string",
+      "id": 106,
+      "isSecret": false
+    },
+    "testSearchTerm": {
+      "value": "Diamond",
+      "type": "string",
+      "id": 107,
+      "isSecret": false
+    },
+    "testGroupBy": {
+      "value": "Category",
+      "type": "string",
+      "id": 108,
+      "isSecret": false
+    },
+    "testSortBy": {
+      "value": "Date",
+      "type": "string",
+      "id": 109,
+      "isSecret": false
+    },
+    "testSortOrder": {
+      "value": "Descending",
+      "type": "string",
+      "id": 110,
+      "isSecret": false
+    },
+    "testPageNumber": {
+      "value": "1",
+      "type": "string",
+      "id": 111,
+      "isSecret": false
+    },
+    "testPageSize": {
+      "value": "10",
+      "type": "string",
+      "id": 112,
+      "isSecret": false
+    },
+    "testRfidStatus": {
+      "value": "Used",
+      "type": "string",
+      "id": 113,
+      "isSecret": false
+    },
+    "testRfidUsagePercentage": {
+      "value": "75.5",
+      "type": "string",
+      "id": 114,
+      "isSecret": false
+    },
+    "testTotalRfidCount": {
+      "value": "1000",
+      "type": "string",
+      "id": 115,
+      "isSecret": false
+    },
+    "testUsedRfidCount": {
+      "value": "755",
+      "type": "string",
+      "id": 116,
+      "isSecret": false
+    },
+    "testUnusedRfidCount": {
+      "value": "245",
+      "type": "string",
+      "id": 117,
+      "isSecret": false
+    },
+    "testDatabaseConnectionString": {
+      "value": "Server=.\\SQLEXPRESS;Database=RfidJewelryDB;Trusted_Connection=true;TrustServerCertificate=true;MultipleActiveResultSets=true;Connection Timeout=30;Max Pool Size=100;Min Pool Size=5",
+      "type": "string",
+      "id": 118,
+      "isSecret": true
+    },
+    "testJwtSecretKey": {
+      "value": "RFID_Jewelry_Inventory_System_2024_Super_Secure_Key_For_Production_Use_Only_123456789012345678901234567890",
+      "type": "string",
+      "id": 119,
+      "isSecret": true
+    },
+    "testJwtIssuer": {
+      "value": "RfidAppApi",
+      "type": "string",
+      "id": 120,
+      "isSecret": false
+    },
+    "testJwtAudience": {
+      "value": "RfidAppApi",
+      "type": "string",
+      "id": 121,
+      "isSecret": false
+    },
+    "testJwtExpiryHours": {
+      "value": "24",
+      "type": "string",
+      "id": 122,
+      "isSecret": false
+    },
+    "adminUserId": {
+      "value": "",
+      "type": "string",
+      "id": 123,
+      "isSecret": false
+    },
+    "subUserId": {
+      "value": "",
+      "type": "string",
+      "id": 124,
+      "isSecret": false
+    },
+    "testAdminUserName": {
+      "value": "admin2@jewelrystore.com",
+      "type": "string",
+      "id": 125,
+      "isSecret": false
+    },
+    "testAdminPassword": {
+      "value": "Admin@123",
+      "type": "string",
+      "id": 126,
+      "isSecret": true
+    },
+    "testAdminFullName": {
+      "value": "Jane Admin",
+      "type": "string",
+      "id": 127,
+      "isSecret": false
+    },
+    "testAdminMobileNumber": {
+      "value": "+91-9876543211",
+      "type": "string",
+      "id": 128,
+      "isSecret": false
+    },
+    "testAdminCity": {
+      "value": "Mumbai",
+      "type": "string",
+      "id": 129,
+      "isSecret": false
+    },
+    "testAdminAddress": {
+      "value": "456 Admin Street, Mumbai, Maharashtra, India",
+      "type": "string",
+      "id": 130,
+      "isSecret": false
+    },
+    "testSubUserName": {
+      "value": "user1@jewelrystore.com",
+      "type": "string",
+      "id": 131,
+      "isSecret": false
+    },
+    "testSubUserPassword": {
+      "value": "User@123",
+      "type": "string",
+      "id": 132,
+      "isSecret": true
+    },
+    "testSubUserFullName": {
+      "value": "John User",
+      "type": "string",
+      "id": 133,
+      "isSecret": false
+    },
+    "testSubUserMobileNumber": {
+      "value": "+91-9876543212",
+      "type": "string",
+      "id": 134,
+      "isSecret": false
+    },
+    "testSubUserCity": {
+      "value": "Mumbai",
+      "type": "string",
+      "id": 135,
+      "isSecret": false
+    },
+    "testSubUserAddress": {
+      "value": "789 User Street, Mumbai, Maharashtra, India",
+      "type": "string",
+      "id": 136,
+      "isSecret": false
+    },
+    "testModuleProduct": {
+      "value": "Product",
+      "type": "string",
+      "id": 137,
+      "isSecret": false
+    },
+    "testModuleRFID": {
+      "value": "RFID",
+      "type": "string",
+      "id": 138,
+      "isSecret": false
+    },
+    "testModuleInvoice": {
+      "value": "Invoice",
+      "type": "string",
+      "id": 139,
+      "isSecret": false
+    },
+    "testActionCreate": {
+      "value": "Create",
+      "type": "string",
+      "id": 140,
+      "isSecret": false
+    },
+    "testActionEdit": {
+      "value": "Edit",
+      "type": "string",
+      "id": 141,
+      "isSecret": false
+    },
+    "testActionDelete": {
+      "value": "Delete",
+      "type": "string",
+      "id": 142,
+      "isSecret": false
+    },
+    "testActionView": {
+      "value": "View",
+      "type": "string",
+      "id": 143,
+      "isSecret": false
+    },
+    "testActionExport": {
+      "value": "Export",
+      "type": "string",
+      "id": 144,
+      "isSecret": false
+    },
+    "testActionImport": {
+      "value": "Import",
+      "type": "string",
+      "id": 145,
+      "isSecret": false
+    },
+    "testPurityId": {
+      "value": "1",
+      "type": "string",
+      "id": 146,
+      "isSecret": false
+    },
+    "testDesignId": {
+      "value": "1",
+      "type": "string",
+      "id": 147,
+      "isSecret": false
+    },
+    "testBoxId": {
+      "value": "1",
+      "type": "string",
+      "id": 148,
+      "isSecret": false
+    },
+    "testProductMasterId": {
+      "value": "1",
+      "type": "string",
+      "id": 149,
+      "isSecret": false
+    },
+    "testBoxType": {
+      "value": "Wooden",
+      "type": "string",
+      "id": 150,
+      "isSecret": false
+    },
+    "testBoxSize": {
+      "value": "Medium",
+      "type": "string",
+      "id": 151,
+      "isSecret": false
+    },
+    "testBoxColor": {
+      "value": "Brown",
+      "type": "string",
+      "id": 152,
+      "isSecret": false
+    },
+    "testBoxMaterial": {
+      "value": "Wood",
+      "type": "string",
+      "id": 153,
+      "isSecret": false
+    },
+    "testPaymentMethod1": {
+      "value": "Cash",
+      "type": "string",
+      "id": 154,
+      "isSecret": false
+    },
+    "testPaymentMethod2": {
+      "value": "UPI",
+      "type": "string",
+      "id": 155,
+      "isSecret": false
+    },
+    "testPaymentMethod3": {
+      "value": "Card",
+      "type": "string",
+      "id": 156,
+      "isSecret": false
+    },
+    "testPaymentAmount1": {
+      "value": "50000.00",
+      "type": "string",
+      "id": 157,
+      "isSecret": false
+    },
+    "testPaymentAmount2": {
+      "value": "40000.00",
+      "type": "string",
+      "id": 158,
+      "isSecret": false
+    },
+    "testPaymentReference1": {
+      "value": "CASH001",
+      "type": "string",
+      "id": 159,
+      "isSecret": false
+    },
+    "testPaymentReference2": {
+      "value": "UPI123456789",
+      "type": "string",
+      "id": 160,
+      "isSecret": false
+    },
+    "testGstPercentage": {
+      "value": "3.00",
+      "type": "string",
+      "id": 161,
+      "isSecret": false
+    },
+    "testIsGstApplied": {
+      "value": "false",
+      "type": "string",
+      "id": 162,
+      "isSecret": false
+    },
+    "testIsGstAppliedPakka": {
+      "value": "true",
+      "type": "string",
+      "id": 163,
+      "isSecret": false
+    },
+    "testSellingPriceWithGst": {
+      "value": "100000.00",
+      "type": "string",
+      "id": 164,
+      "isSecret": false
+    },
+    "testDiscountAmountWithGst": {
+      "value": "5000.00",
+      "type": "string",
+      "id": 165,
+      "isSecret": false
+    },
+    "testFinalAmountWithGst": {
+      "value": "97850.00",
+      "type": "string",
+      "id": 166,
+      "isSecret": false
+    },
+    "testGstAmount": {
+      "value": "2850.00",
+      "type": "string",
+      "id": 167,
+      "isSecret": false
+    },
+    "testAmountBeforeGst": {
+      "value": "95000.00",
+      "type": "string",
+      "id": 168,
+      "isSecret": false
+    },
+    "testTotalAmountWithGst": {
+      "value": "97850.00",
+      "type": "string",
+      "id": 169,
+      "isSecret": false
+    },
+    "resetToken": {
+      "value": "",
+      "type": "string",
+      "id": 170,
+      "isSecret": false
+    },
+    "userEmail": {
+      "value": "",
+      "type": "string",
+      "id": 171,
+      "isSecret": false
+    }
+  }
+}

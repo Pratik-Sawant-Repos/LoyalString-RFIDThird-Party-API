@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "rfid-jewelry-inventory-complete-v5",
 		"name": "RFID Jewelry Inventory System - Complete API Collection v5",
-		"description": "Complete API collection for RFID Jewelry Inventory Management System with Multi-Tenant Architecture, Admin-User Hierarchy System, Granular Permissions, Activity Tracking, Product Management, Image Upload, RFID Tracking, Comprehensive Reporting System, RFID Usage Analytics, Database Management, and Branch/Counter Assignment for Sub-User Registration. All endpoints with real data examples and proper localhost URLs.",
+		"description": "Complete API collection for RFID Jewelry Inventory Management System with Multi-Tenant Architecture, Admin-User Hierarchy System, Granular Permissions, Activity Tracking, Product Management, Image Upload, RFID Tracking, Comprehensive Reporting System, RFID Usage Analytics, Database Management, Branch/Counter Assignment for Sub-User Registration, Email Integration (Welcome & Notification Emails), Password Reset Functionality, User Profile Management (Profile Image Upload, Extended Address, Bio, Designation), Custom Fields for Products, Bulk Product Upload via Excel (100,000+ products), and Comprehensive Dashboard & Analytics APIs.\n\n**✨ Enhanced Features:**\n- ✅ **Standardized Response Format**: All endpoints return consistent `{ success, message, data }` format\n- ✅ **Comprehensive Validation**: ModelState validation, parameter validation, and business rule validation\n- ✅ **Perfect Error Handling**: Consistent error responses with detailed messages\n- ✅ **Permission Management**: Proper MainAdmin vs Admin vs User permission checks\n- ✅ **Self-Protection**: Prevents self-deletion and self-deactivation\n- ✅ **Input Validation**: All DTOs have proper validation attributes\n\nAll endpoints with real data examples and proper localhost URLs.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "rfid-jewelry-system-v5"
 	},
@@ -263,6 +263,112 @@
 					"response": []
 				},
 				{
+					"name": "Forgot Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.resetToken) {",
+									"        pm.environment.set('resetToken', jsonData.resetToken);",
+									"        var email = pm.request.body.urlencoded ? pm.request.body.urlencoded.get('email') : (pm.request.body.raw ? JSON.parse(pm.request.body.raw).email : '');",
+									"        if (email) {",
+									"            pm.environment.set('userEmail', email);",
+									"        }",
+									"        console.log('Reset Token saved:', jsonData.resetToken);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@jewelrystore.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user/forgot-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "user", "forgot-password"]
+						},
+						"description": "Request a password reset token. The token will be sent via email (in production) or returned in the response (for testing). Token is valid for 24 hours."
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var token = pm.environment.get('resetToken');",
+									"var email = pm.environment.get('userEmail');",
+									"",
+									"if (!token) {",
+									"    console.log('Warning: resetToken not found in environment. Please run Forgot Password request first.');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"{{resetToken}}\",\n  \"email\": \"{{userEmail}}\",\n  \"newPassword\": \"NewPassword123!\",\n  \"confirmPassword\": \"NewPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user/reset-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "user", "reset-password"]
+						},
+						"description": "Reset password using the token received from forgot password request. The token is valid for 24 hours. Password must be at least 6 characters and passwords must match."
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password (Manual Token)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"your-reset-token-here\",\n  \"email\": \"admin@jewelrystore.com\",\n  \"newPassword\": \"NewPassword123!\",\n  \"confirmPassword\": \"NewPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user/reset-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "user", "reset-password"]
+						},
+						"description": "Reset password with manually entered token. Use this if you have the token from a previous forgot password request."
+					},
+					"response": []
+				},
+				{
 					"name": "Get My Permissions",
 					"request": {
 						"method": "GET",
@@ -415,6 +521,206 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "📸 Upload Profile Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/UserProfile/upload-image",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "UserProfile", "upload-image"]
+						},
+						"description": "Upload profile image for the current user. Supported formats: JPG, JPEG, PNG, GIF, BMP, WEBP. Max file size: 5MB. The image will be stored and can be accessed via the profile image URL."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('Profile image uploaded successfully');",
+									"    console.log('Image URL:', response.profileImageUrl);",
+									"    if (response.profileImageUrl) {",
+									"        pm.environment.set('profileImageUrl', response.profileImageUrl);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "✏️ Update Profile Information",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"addressLine1\": \"123 Main Street\",\n  \"addressLine2\": \"Suite 100\",\n  \"city\": \"Mumbai\",\n  \"state\": \"Maharashtra\",\n  \"country\": \"India\",\n  \"postalCode\": \"400001\",\n  \"landmark\": \"Near Metro Station\",\n  \"bio\": \"Experienced jewelry store manager with 10+ years in the industry.\",\n  \"designation\": \"Store Manager\",\n  \"alternatePhone\": \"+91-9876543211\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/UserProfile/update",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "UserProfile", "update"]
+						},
+						"description": "Update user profile information including extended address fields, bio, designation, and alternate phone number. All fields are optional - only provided fields will be updated."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('Profile updated successfully');",
+									"    console.log('Profile completion:', response.isProfileComplete ? 'Complete' : 'Incomplete');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "👤 Get My Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/UserProfile/me",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "UserProfile", "me"]
+						},
+						"description": "Get current user's profile information including profile image, extended address details, bio, and designation."
+					},
+					"response": []
+				},
+				{
+					"name": "📋 Get Complete Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/UserProfile/complete",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "UserProfile", "complete"]
+						},
+						"description": "Get complete user profile including user data, profile information, and profile completion percentage."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('Complete profile retrieved');",
+									"    console.log('Profile completion:', response.profileCompletionPercentage + '%');",
+									"    console.log('Profile complete:', response.profile?.isProfileComplete ? 'Yes' : 'No');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "📊 Get Profile Completion Percentage",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/UserProfile/completion",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "UserProfile", "completion"]
+						},
+						"description": "Get profile completion percentage based on filled profile fields. Profile is considered complete at 80% threshold."
+					},
+					"response": []
+				},
+				{
+					"name": "🗑️ Delete Profile Image",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/UserProfile/image",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "UserProfile", "image"]
+						},
+						"description": "Delete the current user's profile image. This will remove both the file and database record."
+					},
+					"response": []
+				},
+				{
+					"name": "👤 Get Profile by User ID (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/UserProfile/{{subUserId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "UserProfile", "{{subUserId}}"]
+						},
+						"description": "Get profile information for a specific user by ID. Only accessible by admins or the user themselves."
+					},
+					"response": []
 				}
 			]
 		},
@@ -437,7 +743,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"itemCode\": \"JWL001\",\n  \"categoryName\": \"Rings\",\n  \"branchName\": \"Main Branch\",\n  \"counterName\": \"Counter 1\",\n  \"productName\": \"Diamond Ring\",\n  \"designName\": \"Classic\",\n  \"purityName\": \"18K\",\n  \"rfidCode\": \"RFID001\",\n  \"grossWeight\": 5.5,\n  \"netWeight\": 4.8,\n  \"stoneWeight\": 0.5,\n  \"diamondHeight\": 2.5,\n  \"boxDetails\": \"Premium velvet box\",\n  \"size\": 18,\n  \"stoneAmount\": 15000,\n  \"diamondAmount\": 25000,\n  \"hallmarkAmount\": 500,\n  \"makingPerGram\": 100,\n  \"makingPercentage\": 15,\n  \"makingFixedAmount\": 2000,\n  \"mrp\": 65000,\n  \"status\": \"Active\"\n}"
+							"raw": "{\n  \"itemCode\": \"JWL001\",\n  \"categoryName\": \"Rings\",\n  \"branchName\": \"Main Branch\",\n  \"counterName\": \"Counter 1\",\n  \"productName\": \"Diamond Ring\",\n  \"designName\": \"Classic\",\n  \"purityName\": \"18K\",\n  \"rfidCode\": \"RFID001\",\n  \"grossWeight\": 5.5,\n  \"netWeight\": 4.8,\n  \"stoneWeight\": 0.5,\n  \"diamondHeight\": 2.5,\n  \"boxDetails\": \"Premium velvet box\",\n  \"size\": 18,\n  \"stoneAmount\": 15000,\n  \"diamondAmount\": 25000,\n  \"hallmarkAmount\": 500,\n  \"makingPerGram\": 100,\n  \"makingPercentage\": 15,\n  \"makingFixedAmount\": 2000,\n  \"mrp\": 65000,\n  \"status\": \"Active\",\n  \"customFields\": {\n    \"Ring Size\": \"7\",\n    \"Band Width\": \"4mm\",\n    \"Setting Type\": \"Prong\",\n    \"Stone Count\": \"1\",\n    \"Has Certificate\": \"true\",\n    \"Certificate Number\": \"CERT-2024-001\",\n    \"Manufacture Date\": \"2024-01-15\",\n    \"Designer Name\": \"John Smith\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/Product/create",
@@ -478,139 +784,16 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "itemCode",
-									"value": "JWL002",
-									"type": "text"
-								},
-								{
-									"key": "categoryName",
-									"value": "Necklaces",
-									"type": "text"
-								},
-								{
-									"key": "branchName",
-									"value": "Main Branch",
-									"type": "text"
-								},
-								{
-									"key": "counterName",
-									"value": "Counter 1",
-									"type": "text"
-								},
-								{
-									"key": "productName",
-									"value": "Gold Necklace",
-									"type": "text"
-								},
-								{
-									"key": "designName",
-									"value": "Traditional",
-									"type": "text"
-								},
-								{
-									"key": "purityName",
-									"value": "22K",
-									"type": "text"
-								},
-								{
-									"key": "rfidCode",
-									"value": "RFID002",
-									"type": "text"
-								},
-								{
-									"key": "grossWeight",
-									"value": "12.5",
-									"type": "text"
-								},
-								{
-									"key": "netWeight",
-									"value": "11.2",
-									"type": "text"
-								},
-								{
-									"key": "stoneWeight",
-									"value": "1.2",
-									"type": "text"
-								},
-								{
-									"key": "diamondHeight",
-									"value": "3.0",
-									"type": "text"
-								},
-								{
-									"key": "boxDetails",
-									"value": "Luxury wooden box",
-									"type": "text"
-								},
-								{
-									"key": "size",
-									"value": "20",
-									"type": "text"
-								},
-								{
-									"key": "stoneAmount",
-									"value": "25000",
-									"type": "text"
-								},
-								{
-									"key": "diamondAmount",
-									"value": "35000",
-									"type": "text"
-								},
-								{
-									"key": "hallmarkAmount",
-									"value": "800",
-									"type": "text"
-								},
-								{
-									"key": "makingPerGram",
-									"value": "120",
-									"type": "text"
-								},
-								{
-									"key": "makingPercentage",
-									"value": "18",
-									"type": "text"
-								},
-								{
-									"key": "makingFixedAmount",
-									"value": "3000",
-									"type": "text"
-								},
-								{
-									"key": "mrp",
-									"value": "95000",
-									"type": "text"
-								},
-								{
-									"key": "status",
-									"value": "Active",
-									"type": "text"
+									"key": "productData",
+									"value": "{\n  \"itemCode\": \"JWL002\",\n  \"categoryName\": \"Necklaces\",\n  \"branchName\": \"Main Branch\",\n  \"counterName\": \"Counter 1\",\n  \"productName\": \"Gold Necklace\",\n  \"designName\": \"Traditional\",\n  \"purityName\": \"22K\",\n  \"rfidCode\": \"RFID002\",\n  \"grossWeight\": 12.5,\n  \"netWeight\": 11.2,\n  \"stoneWeight\": 1.2,\n  \"diamondHeight\": 3.0,\n  \"boxDetails\": \"Luxury wooden box\",\n  \"size\": 20,\n  \"stoneAmount\": 25000,\n  \"diamondAmount\": 35000,\n  \"hallmarkAmount\": 800,\n  \"makingPerGram\": 120,\n  \"makingPercentage\": 18,\n  \"makingFixedAmount\": 3000,\n  \"mrp\": 95000,\n  \"status\": \"Active\",\n  \"customFields\": {\n    \"Certificate Number\": \"CERT12345\",\n    \"Warranty Period\": \"2 years\",\n    \"Origin\": \"India\"\n  },\n  \"images\": [\n    {\n      \"imageType\": \"Primary\",\n      \"displayOrder\": 0\n    },\n    {\n      \"imageType\": \"Secondary\",\n      \"displayOrder\": 1\n    }\n  ]\n}",
+									"type": "text",
+									"description": "JSON string containing product data. Include 'images' array with metadata (optional - if not provided, first image will be Primary, rest will be Secondary)"
 								},
 								{
 									"key": "images",
 									"type": "file",
-									"src": []
-								},
-								{
-									"key": "Images[0].ImageType",
-									"value": "Primary",
-									"type": "text"
-								},
-								{
-									"key": "Images[0].DisplayOrder",
-									"value": "1",
-									"type": "text"
-								},
-								{
-									"key": "Images[1].ImageType",
-									"value": "Secondary",
-									"type": "text"
-								},
-								{
-									"key": "Images[1].DisplayOrder",
-									"value": "2",
-									"type": "text"
+									"src": [],
+									"description": "Product image files (one or more). First image will be marked as Primary if metadata not provided."
 								}
 							]
 						},
@@ -618,7 +801,8 @@
 							"raw": "{{baseUrl}}/api/Product/create-with-images",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Product", "create-with-images"]
-						}
+						},
+						"description": "Create a new product with one or more images. The productData should be a JSON string containing all product information. Images can be uploaded as files. If image metadata is not provided in productData, the first image will be marked as Primary and others as Secondary."
 					},
 					"response": []
 				},
@@ -638,7 +822,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"products\": [\n    {\n      \"itemCode\": \"JWL003\",\n      \"categoryName\": \"Earrings\",\n      \"branchName\": \"Main Branch\",\n      \"counterName\": \"Counter 2\",\n      \"productName\": \"Diamond Earrings\",\n      \"designName\": \"Modern\",\n      \"purityName\": \"18K\",\n      \"rfidCode\": \"RFID003\",\n      \"grossWeight\": 3.2,\n      \"netWeight\": 2.8,\n      \"stoneWeight\": 0.8,\n      \"diamondHeight\": 1.8,\n      \"boxDetails\": \"Elegant box\",\n      \"size\": 16,\n      \"stoneAmount\": 18000,\n      \"diamondAmount\": 22000,\n      \"hallmarkAmount\": 400,\n      \"makingPerGram\": 90,\n      \"makingPercentage\": 12,\n      \"makingFixedAmount\": 1500,\n      \"mrp\": 45000,\n      \"status\": \"Active\"\n    },\n    {\n      \"itemCode\": \"JWL004\",\n      \"categoryName\": \"Bracelets\",\n      \"branchName\": \"Main Branch\",\n      \"counterName\": \"Counter 2\",\n      \"productName\": \"Gold Bracelet\",\n      \"designName\": \"Traditional\",\n      \"purityName\": \"22K\",\n      \"rfidCode\": \"RFID004\",\n      \"grossWeight\": 8.5,\n      \"netWeight\": 7.8,\n      \"stoneWeight\": 0.6,\n      \"diamondHeight\": 2.2,\n      \"boxDetails\": \"Premium box\",\n      \"size\": 19,\n      \"stoneAmount\": 12000,\n      \"diamondAmount\": 18000,\n      \"hallmarkAmount\": 600,\n      \"makingPerGram\": 110,\n      \"makingPercentage\": 16,\n      \"makingFixedAmount\": 2500,\n      \"mrp\": 55000,\n      \"status\": \"Active\"\n    }\n  ]\n}"
+							"raw": "{\n  \"products\": [\n    {\n      \"itemCode\": \"JWL003\",\n      \"categoryName\": \"Earrings\",\n      \"branchName\": \"Main Branch\",\n      \"counterName\": \"Counter 2\",\n      \"productName\": \"Diamond Earrings\",\n      \"designName\": \"Modern\",\n      \"purityName\": \"18K\",\n      \"rfidCode\": \"RFID003\",\n      \"grossWeight\": 3.2,\n      \"netWeight\": 2.8,\n      \"stoneWeight\": 0.8,\n      \"diamondHeight\": 1.8,\n      \"boxDetails\": \"Elegant box\",\n      \"size\": 16,\n      \"stoneAmount\": 18000,\n      \"diamondAmount\": 22000,\n      \"hallmarkAmount\": 400,\n      \"makingPerGram\": 90,\n      \"makingPercentage\": 12,\n      \"makingFixedAmount\": 1500,\n      \"mrp\": 45000,\n      \"status\": \"Active\",\n      \"customFields\": {\n        \"Earring Type\": \"Stud\",\n        \"Has Certificate\": \"true\",\n        \"Stone Shape\": \"Round\"\n      }\n    },\n    {\n      \"itemCode\": \"JWL004\",\n      \"categoryName\": \"Bracelets\",\n      \"branchName\": \"Main Branch\",\n      \"counterName\": \"Counter 2\",\n      \"productName\": \"Gold Bracelet\",\n      \"designName\": \"Traditional\",\n      \"purityName\": \"22K\",\n      \"rfidCode\": \"RFID004\",\n      \"grossWeight\": 8.5,\n      \"netWeight\": 7.8,\n      \"stoneWeight\": 0.6,\n      \"diamondHeight\": 2.2,\n      \"boxDetails\": \"Premium box\",\n      \"size\": 19,\n      \"stoneAmount\": 12000,\n      \"diamondAmount\": 18000,\n      \"hallmarkAmount\": 600,\n      \"makingPerGram\": 110,\n      \"makingPercentage\": 16,\n      \"makingFixedAmount\": 2500,\n      \"mrp\": 55000,\n      \"status\": \"Active\",\n      \"customFields\": {\n        \"Bracelet Length\": \"7 inches\",\n        \"Clasp Type\": \"Toggle\",\n        \"Style\": \"Traditional\"\n      }\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/Product/bulk-create",
@@ -754,7 +938,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"mrp\": 70000,\n  \"status\": \"Active\",\n  \"boxDetails\": \"Updated premium velvet box with certificate\"\n}"
+							"raw": "{\n  \"mrp\": 70000,\n  \"status\": \"Active\",\n  \"boxDetails\": \"Updated premium velvet box with certificate\",\n  \"customFields\": {\n    \"Ring Size\": \"8\",\n    \"Band Width\": \"5mm\",\n    \"Setting Type\": \"Bezel\",\n    \"Has Certificate\": \"true\",\n    \"Certificate Number\": \"CERT-2024-002\",\n    \"Updated Notes\": \"Updated with new certificate\"\n  }\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/Product/{{productId}}",
@@ -826,9 +1010,184 @@
 							"raw": "{{baseUrl}}/api/Product/{{productId}}",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Product", "{{productId}}"]
-						}
+						},
+						"description": "Delete a single product by ID. This will also delete associated images, custom fields, and RFID assignments."
 					},
 					"response": []
+				},
+				{
+					"name": "⚠️ Delete All Products",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Product/delete-all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Product", "delete-all"]
+						},
+						"description": "WARNING: Delete ALL products for the current client. This will permanently delete all products, product images (physical files), custom fields, and RFID assignments. This action cannot be undone. Use with extreme caution!"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var response = pm.response.json();",
+									"    console.log('Successfully deleted', response.deletedCount, 'products');",
+									"    console.log('Message:', response.message);",
+									"} else {",
+									"    console.error('Error deleting products:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "📥 Download Product Excel Template",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/ProductExcel/download-template",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "ProductExcel", "download-template"]
+						},
+						"description": "Download Excel template for bulk product upload. Template includes all required fields, example data, and instructions. Supports up to 100,000 products efficiently."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    console.log('Excel template downloaded successfully');",
+									"    console.log('File size:', pm.response.headers.get('Content-Length'), 'bytes');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "📥 Export All Products to Excel",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/ProductExcel/export-all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "ProductExcel", "export-all"]
+						},
+						"description": "Export all products to Excel file with all fields including: Id, ItemCode, CategoryName, BranchName, CounterName, ProductName, DesignName, PurityName, RfidCode, BoxDetails, GrossWeight, StoneWeight, DiamondHeight, NetWeight, Size, StoneAmount, DiamondAmount, HallmarkAmount, MakingPerGram, MakingPercentage, MakingFixedAmount, MRP, ImageUrl, Status, CreatedOn, and CustomFields (as JSON). The file will be downloaded with a timestamp in the filename."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    console.log('Products exported to Excel successfully');",
+									"    console.log('Content-Type:', pm.response.headers.get('Content-Type'));",
+									"    console.log('File size:', pm.response.headers.get('Content-Length'), 'bytes');",
+									"    var contentDisposition = pm.response.headers.get('Content-Disposition');",
+									"    if (contentDisposition) {",
+									"        var fileName = contentDisposition.split('filename=')[1];",
+									"        console.log('File name:', fileName);",
+									"    }",
+									"} else {",
+									"    console.error('Error exporting products:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "📤 Upload Products from Excel (Bulk)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "excelFile",
+									"type": "file",
+									"src": [],
+									"description": "Excel file (.xlsx) with product data. Can contain up to 100,000 products."
+								},
+								{
+									"key": "updateExisting",
+									"value": "false",
+									"type": "text",
+									"description": "Whether to update existing products (by ItemCode). Default: false"
+								},
+								{
+									"key": "skipErrors",
+									"value": "true",
+									"type": "text",
+									"description": "Whether to skip rows with errors and continue processing. Default: true"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/ProductExcel/upload",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "ProductExcel", "upload"]
+						},
+						"description": "Upload products from Excel file. Optimized for bulk processing (100,000+ products). Processes in batches of 1000 for optimal performance. Returns detailed summary with success/error counts and processing time. Supports custom fields via JSON column."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('Upload Summary:', response.summary);",
+									"    console.log('Total Rows:', response.totalRowsProcessed);",
+									"    console.log('Created:', response.successfullyCreated);",
+									"    console.log('Updated:', response.successfullyUpdated);",
+									"    console.log('Errors:', response.errorRows);",
+									"    console.log('Processing Time:', response.processingTime, 'seconds');",
+									"    if (response.errors && response.errors.length > 0) {",
+									"        console.log('Error Details:', JSON.stringify(response.errors, null, 2));",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Search Products",
@@ -2699,6 +3058,7 @@
 		},
 		{
 			"name": "👑 Admin Management System",
+			"description": "Comprehensive admin management APIs with perfect validation, error handling, and permission management.\n\n**✨ Key Features:**\n- ✅ **Standardized Response Format**: All endpoints return `{ success: true/false, message: \"...\", data: ... }`\n- ✅ **Comprehensive Validation**: ModelState validation, parameter validation (user IDs, dates, pagination), and business rules\n- ✅ **Perfect Error Handling**: Consistent error responses with detailed validation error messages\n- ✅ **Permission Management**: Proper MainAdmin vs Admin vs User permission checks\n- ✅ **Self-Protection**: Prevents self-deletion and self-deactivation\n- ✅ **Input Validation**: All DTOs have proper validation attributes ([Required], [StringLength], [Range], etc.)\n\n**Response Format Examples:**\n\n**Success Response:**\n```json\n{\n  \"success\": true,\n  \"message\": \"User updated successfully.\",\n  \"data\": { ... }\n}\n```\n\n**Error Response:**\n```json\n{\n  \"success\": false,\n  \"message\": \"Invalid user ID.\",\n  \"errors\": [\"User ID must be greater than 0\"]\n}\n```\n\n**Validation Rules:**\n- User IDs must be > 0\n- Page numbers must be >= 1\n- Page size must be between 1 and 100\n- Start date cannot be greater than end date\n- Password must be at least 6 characters\n- All required fields are validated via ModelState",
 			"item": [
 				{
 					"name": "Register Admin User",
@@ -2722,7 +3082,8 @@
 							"raw": "{{baseUrl}}/api/Admin/register-admin",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "register-admin"]
-						}
+						},
+						"description": "Register a new admin user (Main Admin only). After successful registration, two emails are automatically sent:\n1. ✨ Beautiful Welcome Email - Sent to the new admin user with Sparkle RFID Dashboard branding, account details, and dashboard access link\n2. 📧 Notification Email - Sent to the main admin who created the user with registration details\n\nNote: Emails are sent asynchronously and do not affect the user creation process. If SMTP is not configured, emails are skipped with a warning in logs."
 					},
 					"response": [],
 					"event": [
@@ -2732,9 +3093,21 @@
 								"exec": [
 									"if (pm.response.code === 201) {",
 									"    const response = pm.response.json();",
-									"    if (response.userId) {",
-									"        pm.environment.set('adminUserId', response.userId);",
-									"        console.log('Admin user registered successfully with ID:', response.userId);",
+									"    if (response.success && response.data && response.data.userId) {",
+									"        pm.environment.set('adminUserId', response.data.userId);",
+									"        console.log('✅', response.message);",
+									"        console.log('Admin user registered successfully with ID:', response.data.userId);",
+									"        console.log('📧 Emails sent automatically:');",
+									"        console.log('   - ✨ Welcome email sent to:', response.data.email);",
+									"        console.log('   - 📧 Notification email sent to main admin');",
+									"    } else {",
+									"        console.error('❌ Unexpected response format:', response);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"    if (error.errors) {",
+									"        console.error('Validation errors:', error.errors);",
 									"    }",
 									"}"
 								],
@@ -2765,7 +3138,8 @@
 							"raw": "{{baseUrl}}/api/Admin/register-sub-user",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "register-sub-user"]
-						}
+						},
+						"description": "Register a new sub-user under admin. After successful registration, two emails are automatically sent:\n1. ✨ Beautiful Welcome Email - Sent to the new user with Sparkle RFID Dashboard branding, account details, and dashboard access link\n2. 📧 Notification Email - Sent to the admin who created the user with registration details\n\nNote: Emails are sent asynchronously and do not affect the user creation process. If SMTP is not configured, emails are skipped with a warning in logs."
 					},
 					"response": [],
 					"event": [
@@ -2775,9 +3149,22 @@
 								"exec": [
 									"if (pm.response.code === 201) {",
 									"    const response = pm.response.json();",
-									"    if (response.userId) {",
-									"        pm.environment.set('subUserId', response.userId);",
-									"        console.log('Sub-user registered successfully with ID:', response.userId);",
+									"    if (response.success && response.data && response.data.userId) {",
+									"        pm.environment.set('subUserId', response.data.userId);",
+									"        console.log('✅', response.message);",
+									"        console.log('Sub-user registered successfully with ID:', response.data.userId);",
+									"        console.log('📧 Emails sent automatically:');",
+									"        console.log('   - ✨ Welcome email sent to:', response.data.email);",
+									"        console.log('   - 📧 Notification email sent to admin');",
+									"        console.log('   - Check inboxes for beautiful Sparkle RFID Dashboard emails!');",
+									"    } else {",
+									"        console.error('❌ Unexpected response format:', response);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"    if (error.errors) {",
+									"        console.error('Validation errors:', error.errors);",
 									"    }",
 									"}"
 								],
@@ -2800,9 +3187,33 @@
 							"raw": "{{baseUrl}}/api/Admin/users-under-admin",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "users-under-admin"]
-						}
+						},
+						"description": "Get all users managed by the current admin. Returns standardized response with success, message, data, and count.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Users retrieved successfully.\",\n  \"data\": [...],\n  \"count\": 10\n}\n```\n\n**Validation:**\n- Page number must be >= 1\n- Page size must be between 1 and 100"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"        console.log('Total users:', response.count || response.data.length);",
+									"        if (response.data.length > 0 && !pm.environment.get('subUserId')) {",
+									"            pm.environment.set('subUserId', response.data[0].userId);",
+									"        }",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get Users Under Admin with Pagination",
@@ -2861,9 +3272,30 @@
 									"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}/permissions",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "users", "{{subUserId}}", "permissions"]
-								}
+								},
+								"description": "Get user permissions by user ID. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Permissions retrieved successfully.\",\n  \"data\": [...]\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Admin must have access to the user"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success && response.data) {",
+											"        console.log('✅', response.message);",
+											"        console.log('Total permissions:', response.data.length);",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						},
 						{
 							"name": "Get All User Permissions",
@@ -2879,9 +3311,30 @@
 									"raw": "{{baseUrl}}/api/Admin/permissions",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "permissions"]
-								}
+								},
+								"description": "Get all user permissions in organization (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Permissions retrieved successfully.\",\n  \"data\": [...]\n}\n```\n\n**Validation:**\n- Only admins can view all permissions\n- Client code must be present in token"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success && response.data) {",
+											"        console.log('✅', response.message);",
+											"        console.log('Total permissions:', response.data.length);",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						},
 						{
 							"name": "Create/Assign Permissions",
@@ -2905,9 +3358,32 @@
 									"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}/permissions",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "users", "{{subUserId}}", "permissions"]
-								}
+								},
+								"description": "Create/Assign permissions to user (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Permissions assigned successfully.\"\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Permissions list cannot be empty\n- Module is required for each permission\n- Only admins can assign permissions\n- ModelState validation"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success) {",
+											"        console.log('✅', response.message);",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"    if (error.errors) {",
+											"        console.error('Validation errors:', error.errors);",
+											"    }",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						},
 						{
 							"name": "Update User Permissions",
@@ -2931,9 +3407,32 @@
 									"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}/permissions",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "users", "{{subUserId}}", "permissions"]
-								}
+								},
+								"description": "Update user permissions (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Permissions updated successfully.\"\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Permissions list cannot be empty\n- Module is required for each permission\n- Only admins can update permissions\n- ModelState validation"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success) {",
+											"        console.log('✅', response.message);",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"    if (error.errors) {",
+											"        console.error('Validation errors:', error.errors);",
+											"    }",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						},
 						{
 							"name": "Remove All User Permissions",
@@ -2949,9 +3448,29 @@
 									"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}/permissions",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "users", "{{subUserId}}", "permissions"]
-								}
+								},
+								"description": "Remove all permissions from user (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"All permissions removed successfully.\"\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Only admins can remove permissions\n- Admin must have access to the user"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success) {",
+											"        console.log('✅', response.message);",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						},
 						{
 							"name": "Remove Specific Permission",
@@ -2967,9 +3486,29 @@
 									"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}/permissions/Product",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "users", "{{subUserId}}", "permissions", "Product"]
-								}
+								},
+								"description": "Remove specific permission from user (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Permission for module 'Product' removed successfully.\"\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Module name is required\n- Only admins can remove permissions\n- Admin must have access to the user"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success) {",
+											"        console.log('✅', response.message);",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						},
 						{
 							"name": "Bulk Update Permissions",
@@ -2993,9 +3532,32 @@
 									"raw": "{{baseUrl}}/api/Admin/permissions/bulk-update",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "permissions", "bulk-update"]
-								}
+								},
+								"description": "Bulk update permissions for multiple users (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Permissions updated successfully for all users.\"\n}\n```\n\n**Validation:**\n- User IDs list cannot be empty\n- Permissions list cannot be empty\n- Only admins can update permissions\n- ModelState validation"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success) {",
+											"        console.log('✅', response.message);",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"    if (error.errors) {",
+											"        console.error('Validation errors:', error.errors);",
+											"    }",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						},
 						{
 							"name": "Bulk Remove Permissions",
@@ -3019,9 +3581,32 @@
 									"raw": "{{baseUrl}}/api/Admin/permissions/bulk-remove",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "permissions", "bulk-remove"]
-								}
+								},
+								"description": "Bulk remove permissions for multiple users (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Permissions removed successfully for all users.\"\n}\n```\n\n**Validation:**\n- User IDs list cannot be empty\n- If removeAll is false, modules list cannot be empty\n- Only admins can remove permissions\n- ModelState validation"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success) {",
+											"        console.log('✅', response.message);",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"    if (error.errors) {",
+											"        console.error('Validation errors:', error.errors);",
+											"    }",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						},
 						{
 							"name": "Get Available Modules",
@@ -3037,9 +3622,30 @@
 									"raw": "{{baseUrl}}/api/Admin/permissions/modules",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "permissions", "modules"]
-								}
+								},
+								"description": "Get available permission modules (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Modules retrieved successfully.\",\n  \"data\": [\"Product\", \"RFID\", \"Invoice\", ...]\n}\n```\n\n**Validation:**\n- Only admins can view available modules"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success && response.data) {",
+											"        console.log('✅', response.message);",
+											"        console.log('Available modules:', response.data.join(', '));",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						},
 						{
 							"name": "Get User Permission Summary",
@@ -3055,9 +3661,31 @@
 									"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}/permissions/summary",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "users", "{{subUserId}}", "permissions", "summary"]
-								}
+								},
+								"description": "Get permission summary for user. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Permission summary retrieved successfully.\",\n  \"data\": { ... }\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Admin must have access to the user"
 							},
-							"response": []
+							"response": [],
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.success && response.data) {",
+											"        console.log('✅', response.message);",
+											"        console.log('Total permissions:', response.data.totalPermissions);",
+											"        console.log('Active permissions:', response.data.activePermissions);",
+											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							]
 						}
 					]
 				},
@@ -3075,9 +3703,30 @@
 							"raw": "{{baseUrl}}/api/Admin/user-activities",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "user-activities"]
-						}
+						},
+						"description": "Get user activities with filters. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Activities retrieved successfully.\",\n  \"data\": [...],\n  \"count\": 50\n}\n```\n\n**Validation:**\n- Page number must be >= 1\n- Page size must be between 1 and 100\n- Start date cannot be greater than end date\n- User ID must be > 0 if provided"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"        console.log('Total activities:', response.count || response.data.length);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get User Activities with Filters",
@@ -3099,7 +3748,7 @@
 									"value": "2024-01-01"
 								},
 								{
-									"key": "startDate",
+									"key": "endDate",
 									"value": "2024-01-31"
 								},
 								{
@@ -3123,9 +3772,30 @@
 									"value": "20"
 								}
 							]
-						}
+						},
+						"description": "Get user activities with comprehensive filters. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Activities retrieved successfully.\",\n  \"data\": [...],\n  \"count\": 20\n}\n```\n\n**Query Parameters:**\n- `startDate` (optional): Start date for filtering\n- `endDate` (optional): End date for filtering\n- `userId` (optional): Filter by specific user ID\n- `activityType` (optional): Filter by module/activity type\n- `action` (optional): Filter by action (Create, Update, Delete, etc.)\n- `page` (default: 1): Page number\n- `pageSize` (default: 20, max: 100): Number of items per page\n\n**Validation:**\n- Page number must be >= 1\n- Page size must be between 1 and 100\n- Start date cannot be greater than end date"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"        console.log('Total activities:', response.count || response.data.length);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get User Activities by User",
@@ -3141,9 +3811,30 @@
 							"raw": "{{baseUrl}}/api/Admin/user-activities/user/{{subUserId}}",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "user-activities", "user", "{{subUserId}}"]
-						}
+						},
+						"description": "Get activities for a specific user. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"User activities retrieved successfully.\",\n  \"data\": [...],\n  \"count\": 25\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Admin must have access to the user\n- Client code must be present in token"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"        console.log('Total activities:', response.count || response.data.length);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get User Activities by Date Range",
@@ -3169,9 +3860,30 @@
 									"value": "2024-01-31"
 								}
 							]
-						}
+						},
+						"description": "Get user activities by date range. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Activities retrieved successfully.\",\n  \"data\": [...],\n  \"count\": 30\n}\n```\n\n**Validation:**\n- Start date cannot be greater than end date\n- Both dates are required"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"        console.log('Total activities:', response.count || response.data.length);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get User Activities by Module",
@@ -3187,9 +3899,30 @@
 							"raw": "{{baseUrl}}/api/Admin/user-activities/module/Product",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "user-activities", "module", "Product"]
-						}
+						},
+						"description": "Get user activities by module. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Activities retrieved successfully.\",\n  \"data\": [...],\n  \"count\": 15\n}\n```\n\n**Validation:**\n- Module name is required"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"        console.log('Total activities:', response.count || response.data.length);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get User Activities by Action",
@@ -3205,9 +3938,30 @@
 							"raw": "{{baseUrl}}/api/Admin/user-activities/action/Create",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "user-activities", "action", "Create"]
-						}
+						},
+						"description": "Get user activities by action. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Activities retrieved successfully.\",\n  \"data\": [...],\n  \"count\": 10\n}\n```\n\n**Validation:**\n- Action name is required"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"        console.log('Total activities:', response.count || response.data.length);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get Activity Summary",
@@ -3223,9 +3977,29 @@
 							"raw": "{{baseUrl}}/api/Admin/activity-summary",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "activity-summary"]
-						}
+						},
+						"description": "Get activity summary. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Activity summary retrieved successfully.\",\n  \"data\": { ... }\n}\n```"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get Activity Summary by Date Range",
@@ -3251,9 +4025,29 @@
 									"value": "2024-01-31"
 								}
 							]
-						}
+						},
+						"description": "Get activity summary by date range. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Activity summary retrieved successfully.\",\n  \"data\": { ... }\n}\n```\n\n**Validation:**\n- Start date cannot be greater than end date\n- Both dates are required"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get Activity Summary by User",
@@ -3269,9 +4063,29 @@
 							"raw": "{{baseUrl}}/api/Admin/activity-summary/user/{{subUserId}}",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "activity-summary", "user", "{{subUserId}}"]
-						}
+						},
+						"description": "Get activity summary by user. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Activity summary retrieved successfully.\",\n  \"data\": { ... }\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Admin must have access to the user"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get Activity Summary by Module",
@@ -3287,9 +4101,29 @@
 							"raw": "{{baseUrl}}/api/Admin/activity-summary/module/Product",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "activity-summary", "module", "Product"]
-						}
+						},
+						"description": "Get activity summary by module. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Activity summary retrieved successfully.\",\n  \"data\": { ... }\n}\n```\n\n**Validation:**\n- Module name is required"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Deactivate User",
@@ -3357,9 +4191,29 @@
 							"raw": "{{baseUrl}}/api/Admin/user-hierarchy",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "user-hierarchy"]
-						}
+						},
+						"description": "Get user hierarchy. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"User hierarchy retrieved successfully.\",\n  \"data\": { ... }\n}\n```"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Get User Hierarchy by Admin",
@@ -3375,9 +4229,29 @@
 							"raw": "{{baseUrl}}/api/Admin/user-hierarchy/admin/{{adminUserId}}",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "user-hierarchy", "admin", "{{adminUserId}}"]
-						}
+						},
+						"description": "Get user hierarchy by admin (Main Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"User hierarchy retrieved successfully.\",\n  \"data\": { ... }\n}\n```\n\n**Validation:**\n- Admin user ID must be > 0\n- Only main admins can view other admin hierarchies"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Export User Activities to CSV",
@@ -3434,6 +4308,44 @@
 					"response": []
 				},
 				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Admin", "users", "{{subUserId}}"]
+						},
+						"description": "Get user information by ID. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"User retrieved successfully.\",\n  \"data\": { ... }\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Admin must have access to the user"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
 					"name": "Update User",
 					"request": {
 						"method": "PUT",
@@ -3455,9 +4367,32 @@
 							"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "users", "{{subUserId}}"]
-						}
+						},
+						"description": "Update user information (Admin only). All fields are optional. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"User updated successfully.\",\n  \"data\": { ... }\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Only admins can update users\n- ModelState validation for all input fields"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"    if (error.errors) {",
+									"        console.error('Validation errors:', error.errors);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Delete User",
@@ -3473,9 +4408,29 @@
 							"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "users", "{{subUserId}}"]
-						}
+						},
+						"description": "Delete user (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"User deleted successfully.\"\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- Only admins can delete users\n- Cannot delete your own account"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Activate User",
@@ -3499,9 +4454,32 @@
 							"raw": "{{baseUrl}}/api/Admin/activate-user",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "activate-user"]
-						}
+						},
+						"description": "Activate user (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"User activated successfully.\"\n}\n```\n\n**Validation:**\n- User ID must be > 0 (required)\n- Only admins can activate users\n- ModelState validation"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"    if (error.errors) {",
+									"        console.error('Validation errors:', error.errors);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Deactivate User",
@@ -3525,9 +4503,32 @@
 							"raw": "{{baseUrl}}/api/Admin/deactivate-user",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "deactivate-user"]
-						}
+						},
+						"description": "Deactivate user (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"User deactivated successfully.\"\n}\n```\n\n**Validation:**\n- User ID must be > 0 (required)\n- Only admins can deactivate users\n- Cannot deactivate your own account\n- ModelState validation"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"    if (error.errors) {",
+									"        console.error('Validation errors:', error.errors);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "Reset User Password",
@@ -3551,9 +4552,32 @@
 							"raw": "{{baseUrl}}/api/Admin/users/{{subUserId}}/reset-password",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "users", "{{subUserId}}", "reset-password"]
-						}
+						},
+						"description": "Reset user password (Admin only). Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Password reset successfully.\"\n}\n```\n\n**Validation:**\n- User ID must be > 0\n- New password is required (minimum 6 characters)\n- Only admins can reset passwords\n- ModelState validation"
 					},
-					"response": []
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success) {",
+									"        console.log('✅', response.message);",
+									"    }",
+									"} else if (pm.response.code === 400 || pm.response.code === 401 || pm.response.code === 403 || pm.response.code === 404) {",
+									"    const error = pm.response.json();",
+									"    console.error('❌', error.message || 'Request failed');",
+									"    if (error.errors) {",
+									"        console.error('Validation errors:', error.errors);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				},
 				{
 					"name": "🏢 Branch and Counter Management",
@@ -3572,7 +4596,8 @@
 									"raw": "{{baseUrl}}/api/Admin/branches",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "branches"]
-								}
+								},
+								"description": "Get all branches for the current client. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Branches retrieved successfully.\",\n  \"data\": [...],\n  \"count\": 5\n}\n```\n\n**Validation:**\n- Client code must be present in token"
 							},
 							"response": [],
 							"event": [
@@ -3582,10 +4607,15 @@
 										"exec": [
 											"if (pm.response.code === 200) {",
 											"    const response = pm.response.json();",
-											"    if (response && response.length > 0) {",
-											"        pm.environment.set('branchId', response[0].branchId);",
-											"        console.log('Branches retrieved successfully. First branch ID:', response[0].branchId);",
+											"    if (response.success && response.data && response.data.length > 0) {",
+											"        pm.environment.set('branchId', response.data[0].branchId);",
+											"        console.log('✅', response.message);",
+											"        console.log('Total branches:', response.count || response.data.length);",
+											"        console.log('First branch ID:', response.data[0].branchId);",
 											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
 											"}"
 										],
 										"type": "text/javascript"
@@ -3607,7 +4637,8 @@
 									"raw": "{{baseUrl}}/api/Admin/branches/{{branchId}}/counters",
 									"host": ["{{baseUrl}}"],
 									"path": ["api", "Admin", "branches", "{{branchId}}", "counters"]
-								}
+								},
+								"description": "Get counters for a specific branch. Returns standardized response format.\n\n**Response Format:**\n```json\n{\n  \"success\": true,\n  \"message\": \"Counters retrieved successfully.\",\n  \"data\": [...],\n  \"count\": 3\n}\n```\n\n**Validation:**\n- Branch ID must be > 0\n- Client code must be present in token"
 							},
 							"response": [],
 							"event": [
@@ -3617,10 +4648,15 @@
 										"exec": [
 											"if (pm.response.code === 200) {",
 											"    const response = pm.response.json();",
-											"    if (response && response.length > 0) {",
-											"        pm.environment.set('counterId', response[0].counterId);",
-											"        console.log('Counters retrieved successfully. First counter ID:', response[0].counterId);",
+											"    if (response.success && response.data && response.data.length > 0) {",
+											"        pm.environment.set('counterId', response.data[0].counterId);",
+											"        console.log('✅', response.message);",
+											"        console.log('Total counters:', response.count || response.data.length);",
+											"        console.log('First counter ID:', response.data[0].counterId);",
 											"    }",
+											"} else if (pm.response.code === 400 || pm.response.code === 401) {",
+											"    const error = pm.response.json();",
+											"    console.error('❌', error.message || 'Request failed');",
 											"}"
 										],
 										"type": "text/javascript"
@@ -3728,7 +4764,8 @@
 							"raw": "{{baseUrl}}/api/Admin/register-sub-user",
 							"host": ["{{baseUrl}}"],
 							"path": ["api", "Admin", "register-sub-user"]
-						}
+						},
+						"description": "Register a new sub-user with branch/counter assignment. After successful registration, two emails are automatically sent:\n1. ✨ Beautiful Welcome Email - Sent to the new user with Sparkle RFID Dashboard branding, account details, and dashboard access link\n2. 📧 Notification Email - Sent to the admin who created the user with registration details\n\nNote: Emails are sent asynchronously and do not affect the user creation process. If SMTP is not configured, emails are skipped with a warning in logs."
 					},
 					"response": [],
 					"event": [
@@ -3742,6 +4779,9 @@
 									"        pm.environment.set('counterUserId', response.userId);",
 									"        console.log('Counter user registered successfully with ID:', response.userId);",
 									"        console.log('Assigned to Branch ID:', response.branchId, 'Counter ID:', response.counterId);",
+									"        console.log('📧 Emails sent automatically:');",
+									"        console.log('   - ✨ Welcome email sent to:', response.email);",
+									"        console.log('   - 📧 Notification email sent to admin');",
 									"    }",
 									"}"
 								],
@@ -7357,6 +8397,1873 @@
 						"description": "Get complete transfer history for a product including all statuses and locations."
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "📊 Reporting & Analytics",
+			"description": "Comprehensive reporting APIs for stock movements, sales reports, stock summaries, daily balances, RFID usage, and exports",
+			"item": [
+				{
+					"name": "Stock Movements",
+					"item": [
+						{
+							"name": "Create Stock Movement",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"productId\": 1,\n  \"rfidCode\": \"RFID001\",\n  \"movementType\": \"Addition\",\n  \"quantity\": 1,\n  \"unitPrice\": 50000.00,\n  \"totalAmount\": 50000.00,\n  \"referenceNumber\": \"INV-001\",\n  \"referenceType\": \"Invoice\",\n  \"remarks\": \"New stock addition\",\n  \"movementDate\": \"2024-01-15T10:00:00Z\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-movements",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-movements"]
+								},
+								"description": "Create a new stock movement. Movement types: Addition, Sale, Return, Transfer, Adjustment"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Bulk Stock Movements",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"movements\": [\n    {\n      \"productId\": 1,\n      \"movementType\": \"Addition\",\n      \"quantity\": 1,\n      \"unitPrice\": 50000.00\n    },\n    {\n      \"productId\": 2,\n      \"movementType\": \"Addition\",\n      \"quantity\": 1,\n      \"unitPrice\": 75000.00\n    }\n  ],\n  \"movementDate\": \"2024-01-15T10:00:00Z\",\n  \"remarks\": \"Bulk stock addition\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-movements/bulk",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-movements", "bulk"]
+								},
+								"description": "Create multiple stock movements in bulk"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Movements",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-movements?startDate=2024-01-01&endDate=2024-01-31&branchId=1&counterId=1&categoryId=1&movementType=Addition",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-movements"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01",
+											"description": "Start date (optional)"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31",
+											"description": "End date (optional)"
+										},
+										{
+											"key": "branchId",
+											"value": "1",
+											"description": "Branch ID (optional)"
+										},
+										{
+											"key": "counterId",
+											"value": "1",
+											"description": "Counter ID (optional)"
+										},
+										{
+											"key": "categoryId",
+											"value": "1",
+											"description": "Category ID (optional)"
+										},
+										{
+											"key": "movementType",
+											"value": "Addition",
+											"description": "Movement type (optional)"
+										}
+									]
+								},
+								"description": "Get stock movements with optional filters"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Movement by ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-movements/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-movements", "1"]
+								},
+								"description": "Get a specific stock movement by ID"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Movements by Date Range",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-movements/range?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-movements", "range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Get stock movements within a date range"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Movements by Product",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-movements/product/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-movements", "product", "1"]
+								},
+								"description": "Get all stock movements for a specific product"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Movements by Branch",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-movements/branch/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-movements", "branch", "1"]
+								},
+								"description": "Get all stock movements for a specific branch"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Movements by Counter",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-movements/counter/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-movements", "counter", "1"]
+								},
+								"description": "Get all stock movements for a specific counter"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Movements by Category",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-movements/category/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-movements", "category", "1"]
+								},
+								"description": "Get all stock movements for a specific category"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Daily Stock Balances",
+					"item": [
+						{
+							"name": "Get Daily Stock Balance",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-balances/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-balances", "1", "2024-01-15"]
+								},
+								"description": "Get daily stock balance for a specific product and date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Daily Stock Balances",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-balances?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-balances"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Get daily stock balances with optional filters"
+							},
+							"response": []
+						},
+						{
+							"name": "Calculate Daily Stock Balance",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-balances/calculate/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-balances", "calculate", "1", "2024-01-15"]
+								},
+								"description": "Calculate daily stock balance for a specific product and date"
+							},
+							"response": []
+						},
+						{
+							"name": "Calculate All Daily Stock Balances",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-balances/calculate/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-balances", "calculate", "2024-01-15"]
+								},
+								"description": "Calculate daily stock balances for all products on a specific date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Daily Stock Balances by Date Range",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-balances/range?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-balances", "range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Get daily stock balances within a date range"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Sales Reports",
+					"item": [
+						{
+							"name": "Get Sales Report",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/sales?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "sales"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Get sales report with optional filters"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Sales Report by Date",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/sales/date/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "sales", "date", "2024-01-15"]
+								},
+								"description": "Get sales report for a specific date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Sales Report by Date Range",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/sales/range?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "sales", "range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Get sales report for a date range"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Sales Report by Branch",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/sales/branch/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "sales", "branch", "1", "2024-01-15"]
+								},
+								"description": "Get sales report for a specific branch on a date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Sales Report by Counter",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/sales/counter/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "sales", "counter", "1", "2024-01-15"]
+								},
+								"description": "Get sales report for a specific counter on a date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Sales Report by Category",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/sales/category/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "sales", "category", "1", "2024-01-15"]
+								},
+								"description": "Get sales report for a specific category on a date"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Stock Summary Reports",
+					"item": [
+						{
+							"name": "Get Stock Summary Report",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-summary?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-summary"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Get stock summary report with optional filters"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Summary by Date",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-summary/date/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-summary", "date", "2024-01-15"]
+								},
+								"description": "Get stock summary for a specific date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Summary by Branch",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-summary/branch/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-summary", "branch", "1", "2024-01-15"]
+								},
+								"description": "Get stock summary for a specific branch on a date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Summary by Counter",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-summary/counter/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-summary", "counter", "1", "2024-01-15"]
+								},
+								"description": "Get stock summary for a specific counter on a date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Stock Summary by Category",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock-summary/category/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock-summary", "category", "1", "2024-01-15"]
+								},
+								"description": "Get stock summary for a specific category on a date"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Daily Activity Reports",
+					"item": [
+						{
+							"name": "Get Daily Activity Report",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-activity?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-activity"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Get daily activity report with optional filters"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Daily Activity by Date",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-activity/date/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-activity", "date", "2024-01-15"]
+								},
+								"description": "Get daily activity for a specific date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Daily Activity by Branch",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-activity/branch/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-activity", "branch", "1", "2024-01-15"]
+								},
+								"description": "Get daily activity for a specific branch on a date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Daily Activity by Counter",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-activity/counter/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-activity", "counter", "1", "2024-01-15"]
+								},
+								"description": "Get daily activity for a specific counter on a date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Daily Activity by Category",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/daily-activity/category/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "daily-activity", "category", "1", "2024-01-15"]
+								},
+								"description": "Get daily activity for a specific category on a date"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Report Summary",
+					"item": [
+						{
+							"name": "Get Report Summary",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/summary/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "summary", "2024-01-15"]
+								},
+								"description": "Get report summary for a specific date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Report Summary by Date Range",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/summary/range?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "summary", "range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Get report summary for a date range"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Report Summary by Branch",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/summary/branch/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "summary", "branch", "1", "2024-01-15"]
+								},
+								"description": "Get report summary for a specific branch on a date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Report Summary by Counter",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/summary/counter/1/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "summary", "counter", "1", "2024-01-15"]
+								},
+								"description": "Get report summary for a specific counter on a date"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Stock Tracking",
+					"item": [
+						{
+							"name": "Get Current Stock",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock/current/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock", "current", "1"]
+								},
+								"description": "Get current stock quantity for a specific product"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current Stock by Branch",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock/current/1/branch/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock", "current", "1", "branch", "1"]
+								},
+								"description": "Get current stock quantity for a specific product by branch"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current Stock by Counter",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock/current/1/counter/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock", "current", "1", "counter", "1"]
+								},
+								"description": "Get current stock quantity for a specific product by counter"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current Stock by Category",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock/current/category/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock", "current", "category", "1"]
+								},
+								"description": "Get current stock quantity for a specific category"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current Stock Value",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock/value/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock", "value", "1"]
+								},
+								"description": "Get current stock value for a specific product"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current Stock Value by Branch",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock/value/1/branch/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock", "value", "1", "branch", "1"]
+								},
+								"description": "Get current stock value for a specific product by branch"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current Stock Value by Counter",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock/value/1/counter/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock", "value", "1", "counter", "1"]
+								},
+								"description": "Get current stock value for a specific product by counter"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current Stock Value by Category",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/stock/value/category/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "stock", "value", "category", "1"]
+								},
+								"description": "Get current stock value for a specific category"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "RFID Usage Reports",
+					"item": [
+						{
+							"name": "Get RFID Usage Report",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage"]
+								},
+								"description": "Get comprehensive RFID usage report"
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFID Usage Report by Date",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/date/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "date", "2024-01-15"]
+								},
+								"description": "Get RFID usage report for a specific date"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Used RFID Tags",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/used",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "used"]
+								},
+								"description": "Get all used RFID tags"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Unused RFID Tags",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/unused",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "unused"]
+								},
+								"description": "Get all unused RFID tags"
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFID Tags by Status",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/status/true",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "status", "true"]
+								},
+								"description": "Get RFID tags by usage status (true for used, false for unused)"
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFID Usage by Category",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/by-category",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "by-category"]
+								},
+								"description": "Get RFID usage summary by category"
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFID Usage by Branch",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/by-branch",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "by-branch"]
+								},
+								"description": "Get RFID usage summary by branch"
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFID Usage by Counter",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/by-counter",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "by-counter"]
+								},
+								"description": "Get RFID usage summary by counter"
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFID Usage by Category ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/category/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "category", "1"]
+								},
+								"description": "Get RFID usage summary for a specific category"
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFID Usage by Branch ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/branch/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "branch", "1"]
+								},
+								"description": "Get RFID usage summary for a specific branch"
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFID Usage by Counter ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/counter/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "counter", "1"]
+								},
+								"description": "Get RFID usage summary for a specific counter"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Total RFID Tags Count",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/count/total",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "count", "total"]
+								},
+								"description": "Get total count of RFID tags"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Used RFID Tags Count",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/count/used",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "count", "used"]
+								},
+								"description": "Get count of used RFID tags"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Unused RFID Tags Count",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/count/unused",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "count", "unused"]
+								},
+								"description": "Get count of unused RFID tags"
+							},
+							"response": []
+						},
+						{
+							"name": "Get RFID Usage Percentage",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/rfid-usage/percentage",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "rfid-usage", "percentage"]
+								},
+								"description": "Get RFID usage percentage"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Utility APIs",
+					"item": [
+						{
+							"name": "Process Daily Stock Balances",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/process-balances/2024-01-15",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "process-balances", "2024-01-15"]
+								},
+								"description": "Process daily stock balances for a specific date"
+							},
+							"response": []
+						},
+						{
+							"name": "Process All Daily Stock Balances",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/process-balances/range?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "process-balances", "range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Process daily stock balances for a date range"
+							},
+							"response": []
+						},
+						{
+							"name": "Recalculate Stock Balances",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/recalculate-balances?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "recalculate-balances"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Recalculate stock balances for a date range"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Export APIs",
+					"item": [
+						{
+							"name": "Export Stock Movements to CSV",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/export/stock-movements/csv?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "export", "stock-movements", "csv"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Export stock movements to CSV file"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Stock Movements to Excel",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/export/stock-movements/excel?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "export", "stock-movements", "excel"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Export stock movements to Excel file"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Daily Balances to CSV",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/export/daily-balances/csv?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "export", "daily-balances", "csv"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Export daily balances to CSV file"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Daily Balances to Excel",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/export/daily-balances/excel?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "export", "daily-balances", "excel"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Export daily balances to Excel file"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Sales Report to CSV",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/export/sales-report/csv?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "export", "sales-report", "csv"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Export sales report to CSV file"
+							},
+							"response": []
+						},
+						{
+							"name": "Export Sales Report to Excel",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/export/sales-report/excel?startDate=2024-01-01&endDate=2024-01-31",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "export", "sales-report", "excel"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31"
+										}
+									]
+								},
+								"description": "Export sales report to Excel file"
+							},
+							"response": []
+						},
+						{
+							"name": "Export RFID Usage to CSV",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/export/rfid-usage/csv",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "export", "rfid-usage", "csv"]
+								},
+								"description": "Export RFID usage to CSV file"
+							},
+							"response": []
+						},
+						{
+							"name": "Export RFID Usage to Excel",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/Reporting/export/rfid-usage/excel",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "Reporting", "export", "rfid-usage", "excel"]
+								},
+								"description": "Export RFID usage to Excel file"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "📊 Dashboard & Analytics",
+			"item": [
+				{
+					"name": "Get Dashboard Summary (All Metrics in One Call)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/summary",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "summary"]
+						},
+						"description": "Get comprehensive dashboard summary with all important metrics in a single API call. Returns:\n- Product Metrics: Total products, active products, sold products, recently added count\n- Weight Metrics: Total gross weight, net weight, stone weight, averages\n- Sales Metrics: Total revenue, sales count, average order value, month growth, current/previous month sales\n- Customer Metrics: Total customers, invoices, active customers\n- Category & Branch Metrics: Total categories, branches, counters, top category\n- Inventory Value: Total inventory value, average product price\n- RFID Metrics: Total tags, used tags, unused tags\n\nThis is the recommended endpoint for dashboard overview as it returns all key metrics in one optimized call."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    const data = response.data;",
+									"    console.log('=== Dashboard Summary ===');",
+									"    console.log('Total Products:', data?.totalProductCount);",
+									"    console.log('Active Products:', data?.activeProductCount);",
+									"    console.log('Sold Products:', data?.totalSoldProducts);",
+									"    console.log('Total Gross Weight:', data?.totalGrossWeight);",
+									"    console.log('Total Net Weight:', data?.totalNetWeight);",
+									"    console.log('Total Stone Weight:', data?.totalStoneWeight);",
+									"    console.log('Total Revenue:', data?.totalRevenue);",
+									"    console.log('Sales Month Growth:', data?.salesMonthGrowth + '%');",
+									"    console.log('Total Customers:', data?.totalCustomers);",
+									"    console.log('Total Inventory Value:', data?.totalInventoryValue);",
+									"    console.log('Total RFID Tags:', data?.totalRfidTags);",
+									"    console.log('Used RFID Tags:', data?.usedRfidTags);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Complete Dashboard Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard"]
+						},
+						"description": "Get comprehensive dashboard data including total products, sold products, recently added products, monthly sales, sales growth, user product creations, top selling products, weight by category, and customer summary."
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    console.log('Dashboard Data Retrieved:');",
+									"    console.log('Total Products:', response.data?.totalProductCount);",
+									"    console.log('Total Sold Products:', response.data?.totalSoldProducts);",
+									"    console.log('Sales Month Growth:', response.data?.salesMonthGrowth + '%');",
+									"    console.log('Total Customers:', response.data?.customerSummary?.totalCustomers);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Total Product Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/total-products",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "total-products"]
+						},
+						"description": "Get total count of all products in the system."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Total Sold Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/total-sold-products",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "total-sold-products"]
+						},
+						"description": "Get total count of products that have been sold (from invoices and stock movements)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recently Added Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/recently-added?count=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "recently-added"],
+							"query": [
+								{
+									"key": "count",
+									"value": "10",
+									"description": "Number of recently added products to retrieve (default: 10)"
+								}
+							]
+						},
+						"description": "Get recently added products ordered by creation date. Returns product details including item code, product name, category, branch, counter, MRP, and gross weight."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sales Over Month",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/sales-over-month?months=12",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "sales-over-month"],
+							"query": [
+								{
+									"key": "months",
+									"value": "12",
+									"description": "Number of months to retrieve sales data (default: 12)"
+								}
+							]
+						},
+						"description": "Get sales data aggregated by month for the specified number of months. Returns monthly sales count and total sales amount."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sales Month Growth",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/sales-growth",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "sales-growth"]
+						},
+						"description": "Get sales month growth percentage comparing current month sales with previous month sales."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Product Creations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/user-product-creations",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "user-product-creations"]
+						},
+						"description": "Get which user added which products. Returns a list of users with their product creation details including product IDs, item codes, product names, and creation dates."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Top Selling Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/top-selling?topCount=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "top-selling"],
+							"query": [
+								{
+									"key": "topCount",
+									"value": "10",
+									"description": "Number of top selling products to retrieve (default: 10)"
+								}
+							]
+						},
+						"description": "Get top selling products based on sales count. Returns product details including total sold count, total sales amount, and average selling price."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Total Weight by Category",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/weight-by-category",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "weight-by-category"]
+						},
+						"description": "Get total weight of all products grouped by category. Returns product count, total gross weight, total net weight, and total stone weight for each category."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/customer-summary",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "customer-summary"]
+						},
+						"description": "Get customer summary information including total customers, total invoices, total revenue, average order value, and top customers list."
+					},
+					"response": []
+				},
+				{
+					"name": "Export Dashboard Data to Excel",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Dashboard/export-excel",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Dashboard", "export-excel"]
+						},
+						"description": "Download all dashboard data in Excel format. The Excel file contains multiple sheets:\n- Dashboard Summary: Key metrics\n- Recently Added Products: Latest products\n- Monthly Sales: Sales data by month\n- User Product Creations: Which user created which products\n- Top Selling Products: Best selling products\n- Weight by Category: Total weight grouped by category\n- Customer Summary: Customer information and top customers"
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    console.log('Dashboard Excel file downloaded successfully');",
+									"    console.log('Content-Type:', pm.response.headers.get('Content-Type'));",
+									"    console.log('File size:', pm.response.headers.get('Content-Length'), 'bytes');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
 				}
 			]
 		}
