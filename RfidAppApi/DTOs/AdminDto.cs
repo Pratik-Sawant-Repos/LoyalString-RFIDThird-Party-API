@@ -81,11 +81,21 @@ namespace RfidAppApi.DTOs
     /// </summary>
     public class UpdateUserByAdminDto
     {
+        [StringLength(150)]
         public string? FullName { get; set; }
+
+        [StringLength(20)]
         public string? MobileNumber { get; set; }
+
+        [StringLength(100)]
         public string? City { get; set; }
+
+        [StringLength(255)]
         public string? Address { get; set; }
+
+        [StringLength(100)]
         public string? ShowroomType { get; set; }
+
         public bool? IsActive { get; set; }
         public bool? IsAdmin { get; set; }
         

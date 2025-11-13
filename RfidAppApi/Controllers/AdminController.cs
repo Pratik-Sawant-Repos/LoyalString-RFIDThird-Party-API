@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RfidAppApi.DTOs;
 using RfidAppApi.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace RfidAppApi.Controllers
@@ -39,26 +40,39 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
+                // Check if user is MainAdmin
                 if (!await IsMainAdminAsync(adminUserId))
                 {
-                    return Forbid("Only main admins can register admin users.");
+                    return StatusCode(403, new { success = false, message = "Only main admins can register admin users." });
                 }
 
                 var result = await _adminService.CreateUserAsync(createUserDto, adminUserId);
-                return CreatedAtAction(nameof(GetUser), new { userId = result.UserId }, result);
+                return CreatedAtAction(nameof(GetUser), new { userId = result.UserId }, new { success = true, message = "Admin user created successfully.", data = result });
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return StatusCode(403, new { success = false, message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { success = false, message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while creating the admin user.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while creating the admin user.", error = ex.Message });
             }
         }
 
@@ -76,26 +90,39 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
+                // Check if user is Admin
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can register sub-users.");
+                    return StatusCode(403, new { success = false, message = "Only admins can register sub-users." });
                 }
 
                 var result = await _adminService.CreateUserAsync(createUserDto, adminUserId);
-                return CreatedAtAction(nameof(GetUser), new { userId = result.UserId }, result);
+                return CreatedAtAction(nameof(GetUser), new { userId = result.UserId }, new { success = true, message = "Sub-user created successfully.", data = result });
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return StatusCode(403, new { success = false, message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { success = false, message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while creating the sub-user.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while creating the sub-user.", error = ex.Message });
             }
         }
 
@@ -112,19 +139,31 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var user = await _adminService.GetUserByIdAsync(userId, adminUserId);
                 
                 if (user == null)
                 {
-                    return NotFound(new { message = "User not found or access denied." });
+                    return NotFound(new { success = false, message = "User not found or access denied." });
                 }
 
-                return Ok(user);
+                return Ok(new { success = true, message = "User retrieved successfully.", data = user });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving the user.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving the user.", error = ex.Message });
             }
         }
 
@@ -144,13 +183,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (page < 1)
+                {
+                    return BadRequest(new { success = false, message = "Page number must be greater than 0." });
+                }
+
+                if (pageSize < 1 || pageSize > 100)
+                {
+                    return BadRequest(new { success = false, message = "Page size must be between 1 and 100." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var users = await _adminService.GetUsersByAdminAsync(adminUserId);
-                return Ok(users);
+                return Ok(new { success = true, message = "Users retrieved successfully.", data = users, count = users.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving users.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving users.", error = ex.Message });
             }
         }
 
@@ -169,21 +225,51 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
+                // Check if user is Admin
+                if (!await IsAdminAsync(adminUserId))
+                {
+                    return StatusCode(403, new { success = false, message = "Only admins can update users." });
+                }
+
                 var result = await _adminService.UpdateUserAsync(userId, updateUserDto, adminUserId);
-                return Ok(result);
+                
+                if (result == null)
+                {
+                    return NotFound(new { success = false, message = "User not found or access denied." });
+                }
+
+                return Ok(new { success = true, message = "User updated successfully.", data = result });
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return StatusCode(403, new { success = false, message = ex.Message });
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { success = false, message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while updating the user.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while updating the user.", error = ex.Message });
             }
         }
 
@@ -200,23 +286,47 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
+                // Check if user is Admin
+                if (!await IsAdminAsync(adminUserId))
+                {
+                    return StatusCode(403, new { success = false, message = "Only admins can delete users." });
+                }
+
+                // Prevent self-deletion
+                if (userId == adminUserId)
+                {
+                    return BadRequest(new { success = false, message = "You cannot delete your own account." });
+                }
+
                 var result = await _adminService.DeleteUserAsync(userId, adminUserId);
                 
                 if (!result)
                 {
-                    return NotFound(new { message = "User not found or access denied." });
+                    return NotFound(new { success = false, message = "User not found or access denied." });
                 }
 
-                return Ok(new { message = "User deleted successfully." });
+                return Ok(new { success = true, message = "User deleted successfully." });
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return StatusCode(403, new { success = false, message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while deleting the user.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while deleting the user.", error = ex.Message });
             }
         }
 
@@ -233,24 +343,43 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate parameters
+                if (activateUserDto.UserId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
+                // Check if user is Admin
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can activate users.");
+                    return StatusCode(403, new { success = false, message = "Only admins can activate users." });
                 }
 
                 var result = await _adminService.ActivateUserAsync(activateUserDto.UserId, adminUserId);
                 
                 if (!result)
                 {
-                    return NotFound(new { message = "User not found or access denied." });
+                    return NotFound(new { success = false, message = "User not found or access denied." });
                 }
 
-                return Ok(new { message = "User activated successfully." });
+                return Ok(new { success = true, message = "User activated successfully." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while activating the user.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while activating the user.", error = ex.Message });
             }
         }
 
@@ -267,24 +396,49 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate parameters
+                if (deactivateUserDto.UserId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
+                // Check if user is Admin
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can deactivate users.");
+                    return StatusCode(403, new { success = false, message = "Only admins can deactivate users." });
+                }
+
+                // Prevent self-deactivation
+                if (deactivateUserDto.UserId == adminUserId)
+                {
+                    return BadRequest(new { success = false, message = "You cannot deactivate your own account." });
                 }
 
                 var result = await _adminService.DeactivateUserAsync(deactivateUserDto.UserId, adminUserId);
                 
                 if (!result)
                 {
-                    return NotFound(new { message = "User not found or access denied." });
+                    return NotFound(new { success = false, message = "User not found or access denied." });
                 }
 
-                return Ok(new { message = "User deactivated successfully." });
+                return Ok(new { success = true, message = "User deactivated successfully." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while deactivating the user.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while deactivating the user.", error = ex.Message });
             }
         }
 
@@ -303,24 +457,48 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                if (string.IsNullOrWhiteSpace(resetPasswordDto?.NewPassword) || resetPasswordDto.NewPassword.Length < 6)
+                {
+                    return BadRequest(new { success = false, message = "Password must be at least 6 characters long." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
+                // Check if user is Admin
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can reset passwords.");
+                    return StatusCode(403, new { success = false, message = "Only admins can reset passwords." });
                 }
 
                 var result = await _adminService.ResetUserPasswordAsync(userId, resetPasswordDto.NewPassword, adminUserId);
                 
                 if (!result)
                 {
-                    return NotFound(new { message = "User not found or access denied." });
+                    return NotFound(new { success = false, message = "User not found or access denied." });
                 }
 
-                return Ok(new { message = "Password reset successfully." });
+                return Ok(new { success = true, message = "Password reset successfully." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while resetting the password.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while resetting the password.", error = ex.Message });
             }
         }
 
@@ -341,18 +519,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await _adminService.CanUserAccessUserAsync(adminUserId, userId))
                 {
-                    return Forbid("Access denied.");
+                    return StatusCode(403, new { success = false, message = "Access denied." });
                 }
 
                 var permissions = await _adminService.GetUserPermissionsAsync(userId);
-                return Ok(permissions);
+                return Ok(new { success = true, message = "Permissions retrieved successfully.", data = permissions });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving permissions.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving permissions.", error = ex.Message });
             }
         }
 
@@ -367,19 +557,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can view all permissions.");
+                    return StatusCode(403, new { success = false, message = "Only admins can view all permissions." });
                 }
 
                 var clientCode = GetClientCodeFromToken();
+                if (string.IsNullOrEmpty(clientCode))
+                {
+                    return BadRequest(new { success = false, message = "Client code not found in token." });
+                }
+
                 var permissions = await _adminService.GetAllUserPermissionsAsync(clientCode);
-                return Ok(permissions);
+                return Ok(new { success = true, message = "Permissions retrieved successfully.", data = permissions });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving permissions.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving permissions.", error = ex.Message });
             }
         }
 
@@ -398,29 +599,52 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                if (permissions == null || permissions.Count == 0)
+                {
+                    return BadRequest(new { success = false, message = "Permissions list cannot be empty." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can assign permissions.");
+                    return StatusCode(403, new { success = false, message = "Only admins can assign permissions." });
                 }
 
                 if (!await _adminService.CanUserAccessUserAsync(adminUserId, userId))
                 {
-                    return Forbid("Access denied to this user.");
+                    return StatusCode(403, new { success = false, message = "Access denied to this user." });
                 }
 
                 var result = await _adminService.UpdateUserPermissionsAsync(userId, permissions, adminUserId);
                 
                 if (!result)
                 {
-                    return BadRequest(new { message = "Failed to assign permissions." });
+                    return BadRequest(new { success = false, message = "Failed to assign permissions." });
                 }
 
-                return Ok(new { message = "Permissions assigned successfully." });
+                return Ok(new { success = true, message = "Permissions assigned successfully." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while assigning permissions.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while assigning permissions.", error = ex.Message });
             }
         }
 
@@ -439,29 +663,52 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                if (permissions == null || permissions.Count == 0)
+                {
+                    return BadRequest(new { success = false, message = "Permissions list cannot be empty." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can update permissions.");
+                    return StatusCode(403, new { success = false, message = "Only admins can update permissions." });
                 }
 
                 if (!await _adminService.CanUserAccessUserAsync(adminUserId, userId))
                 {
-                    return Forbid("Access denied to this user.");
+                    return StatusCode(403, new { success = false, message = "Access denied to this user." });
                 }
 
                 var result = await _adminService.UpdateUserPermissionsAsync(userId, permissions, adminUserId);
                 
                 if (!result)
                 {
-                    return BadRequest(new { message = "Failed to update permissions." });
+                    return BadRequest(new { success = false, message = "Failed to update permissions." });
                 }
 
-                return Ok(new { message = "Permissions updated successfully." });
+                return Ok(new { success = true, message = "Permissions updated successfully." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while updating permissions.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while updating permissions.", error = ex.Message });
             }
         }
 
@@ -478,29 +725,41 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can remove permissions.");
+                    return StatusCode(403, new { success = false, message = "Only admins can remove permissions." });
                 }
 
                 if (!await _adminService.CanUserAccessUserAsync(adminUserId, userId))
                 {
-                    return Forbid("Access denied to this user.");
+                    return StatusCode(403, new { success = false, message = "Access denied to this user." });
                 }
 
                 var result = await _adminService.RemoveUserPermissionsAsync(userId, adminUserId);
                 
                 if (!result)
                 {
-                    return BadRequest(new { message = "Failed to remove permissions." });
+                    return BadRequest(new { success = false, message = "Failed to remove permissions." });
                 }
 
-                return Ok(new { message = "All permissions removed successfully." });
+                return Ok(new { success = true, message = "All permissions removed successfully." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while removing permissions.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while removing permissions.", error = ex.Message });
             }
         }
 
@@ -518,29 +777,46 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                if (string.IsNullOrWhiteSpace(module))
+                {
+                    return BadRequest(new { success = false, message = "Module name is required." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can remove permissions.");
+                    return StatusCode(403, new { success = false, message = "Only admins can remove permissions." });
                 }
 
                 if (!await _adminService.CanUserAccessUserAsync(adminUserId, userId))
                 {
-                    return Forbid("Access denied to this user.");
+                    return StatusCode(403, new { success = false, message = "Access denied to this user." });
                 }
 
                 var result = await _adminService.RemoveUserPermissionAsync(userId, module, adminUserId);
                 
                 if (!result)
                 {
-                    return BadRequest(new { message = "Failed to remove permission." });
+                    return BadRequest(new { success = false, message = "Failed to remove permission." });
                 }
 
-                return Ok(new { message = $"Permission for module '{module}' removed successfully." });
+                return Ok(new { success = true, message = $"Permission for module '{module}' removed successfully." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while removing permission.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while removing permission.", error = ex.Message });
             }
         }
 
@@ -557,24 +833,52 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate parameters
+                if (bulkUpdate == null)
+                {
+                    return BadRequest(new { success = false, message = "Bulk update data is required." });
+                }
+
+                if (bulkUpdate.UserIds == null || bulkUpdate.UserIds.Count == 0)
+                {
+                    return BadRequest(new { success = false, message = "User IDs list cannot be empty." });
+                }
+
+                if (bulkUpdate.Permissions == null || bulkUpdate.Permissions.Count == 0)
+                {
+                    return BadRequest(new { success = false, message = "Permissions list cannot be empty." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can update permissions.");
+                    return StatusCode(403, new { success = false, message = "Only admins can update permissions." });
                 }
 
                 var result = await _adminService.BulkUpdatePermissionsAsync(bulkUpdate, adminUserId);
                 
                 if (!result)
                 {
-                    return BadRequest(new { message = "Failed to update permissions." });
+                    return BadRequest(new { success = false, message = "Failed to update permissions." });
                 }
 
-                return Ok(new { message = "Permissions updated successfully for all users." });
+                return Ok(new { success = true, message = "Permissions updated successfully for all users." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while updating permissions.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while updating permissions.", error = ex.Message });
             }
         }
 
@@ -591,24 +895,52 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data.", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+                }
+
+                // Validate parameters
+                if (bulkRemove == null)
+                {
+                    return BadRequest(new { success = false, message = "Bulk remove data is required." });
+                }
+
+                if (bulkRemove.UserIds == null || bulkRemove.UserIds.Count == 0)
+                {
+                    return BadRequest(new { success = false, message = "User IDs list cannot be empty." });
+                }
+
+                if (!bulkRemove.RemoveAll && (bulkRemove.Modules == null || bulkRemove.Modules.Count == 0))
+                {
+                    return BadRequest(new { success = false, message = "Modules list cannot be empty when RemoveAll is false." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can remove permissions.");
+                    return StatusCode(403, new { success = false, message = "Only admins can remove permissions." });
                 }
 
                 var result = await _adminService.BulkRemovePermissionsAsync(bulkRemove, adminUserId);
                 
                 if (!result)
                 {
-                    return BadRequest(new { message = "Failed to remove permissions." });
+                    return BadRequest(new { success = false, message = "Failed to remove permissions." });
                 }
 
-                return Ok(new { message = "Permissions removed successfully for all users." });
+                return Ok(new { success = true, message = "Permissions removed successfully for all users." });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while removing permissions.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while removing permissions.", error = ex.Message });
             }
         }
 
@@ -623,10 +955,16 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can view available modules.");
+                    return StatusCode(403, new { success = false, message = "Only admins can view available modules." });
                 }
 
                 var modules = new[]
@@ -642,11 +980,11 @@ namespace RfidAppApi.Controllers
                     "Admin"
                 };
 
-                return Ok(modules);
+                return Ok(new { success = true, message = "Modules retrieved successfully.", data = modules });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving modules.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving modules.", error = ex.Message });
             }
         }
 
@@ -663,18 +1001,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await _adminService.CanUserAccessUserAsync(adminUserId, userId))
                 {
-                    return Forbid("Access denied.");
+                    return StatusCode(403, new { success = false, message = "Access denied." });
                 }
 
                 var summary = await _adminService.GetUserPermissionSummaryAsync(userId);
-                return Ok(summary);
+                return Ok(new { success = true, message = "Permission summary retrieved successfully.", data = summary });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving permission summary.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving permission summary.", error = ex.Message });
             }
         }
 
@@ -685,7 +1035,13 @@ namespace RfidAppApi.Controllers
         /// <summary>
         /// Get user activities with filters
         /// </summary>
-        /// <param name="filter">Activity filter parameters</param>
+        /// <param name="startDate">Start date for filtering activities</param>
+        /// <param name="endDate">End date for filtering activities</param>
+        /// <param name="userId">User ID to filter activities (optional)</param>
+        /// <param name="activityType">Activity type to filter (optional)</param>
+        /// <param name="action">Action name to filter (optional)</param>
+        /// <param name="page">Page number for pagination (default: 1)</param>
+        /// <param name="pageSize">Page size for pagination (default: 20, max: 100)</param>
         /// <returns>List of user activities</returns>
         [HttpGet("user-activities")]
         [ProducesResponseType(typeof(IEnumerable<UserActivityDto>), 200)]
@@ -701,7 +1057,34 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (page < 1)
+                {
+                    return BadRequest(new { success = false, message = "Page number must be greater than 0." });
+                }
+
+                if (pageSize < 1 || pageSize > 100)
+                {
+                    return BadRequest(new { success = false, message = "Page size must be between 1 and 100." });
+                }
+
+                if (startDate.HasValue && endDate.HasValue && startDate > endDate)
+                {
+                    return BadRequest(new { success = false, message = "Start date cannot be greater than end date." });
+                }
+
+                if (userId.HasValue && userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var filter = new ActivityFilterDto
                 {
                     StartDate = startDate,
@@ -713,11 +1096,11 @@ namespace RfidAppApi.Controllers
                     PageSize = pageSize
                 };
                 var activities = await _adminService.GetAllActivitiesAsync(filter, adminUserId);
-                return Ok(activities);
+                return Ok(new { success = true, message = "Activities retrieved successfully.", data = activities, count = activities.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving activities.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving activities.", error = ex.Message });
             }
         }
 
@@ -734,20 +1117,37 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await _adminService.CanUserAccessUserAsync(adminUserId, userId))
                 {
-                    return Forbid("Access denied.");
+                    return StatusCode(403, new { success = false, message = "Access denied." });
                 }
 
                 var filter = new ActivityFilterDto { UserId = userId };
                 var clientCode = GetClientCodeFromToken();
+                if (string.IsNullOrEmpty(clientCode))
+                {
+                    return BadRequest(new { success = false, message = "Client code not found in token." });
+                }
+
                 var activities = await _adminService.GetUserActivitiesAsync(filter, clientCode);
-                return Ok(activities);
+                return Ok(new { success = true, message = "User activities retrieved successfully.", data = activities, count = activities.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving user activities.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving user activities.", error = ex.Message });
             }
         }
 
@@ -766,18 +1166,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (startDate > endDate)
+                {
+                    return BadRequest(new { success = false, message = "Start date cannot be greater than end date." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var filter = new ActivityFilterDto
                 {
                     StartDate = startDate,
                     EndDate = endDate
                 };
                 var activities = await _adminService.GetAllActivitiesAsync(filter, adminUserId);
-                return Ok(activities);
+                return Ok(new { success = true, message = "Activities retrieved successfully.", data = activities, count = activities.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving activities.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving activities.", error = ex.Message });
             }
         }
 
@@ -793,14 +1205,26 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (string.IsNullOrWhiteSpace(module))
+                {
+                    return BadRequest(new { success = false, message = "Module name is required." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var filter = new ActivityFilterDto { ActivityType = module };
                 var activities = await _adminService.GetAllActivitiesAsync(filter, adminUserId);
-                return Ok(activities);
+                return Ok(new { success = true, message = "Activities retrieved successfully.", data = activities, count = activities.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving activities.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving activities.", error = ex.Message });
             }
         }
 
@@ -816,14 +1240,26 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (string.IsNullOrWhiteSpace(action))
+                {
+                    return BadRequest(new { success = false, message = "Action name is required." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var filter = new ActivityFilterDto { Action = action };
                 var activities = await _adminService.GetAllActivitiesAsync(filter, adminUserId);
-                return Ok(activities);
+                return Ok(new { success = true, message = "Activities retrieved successfully.", data = activities, count = activities.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving activities.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving activities.", error = ex.Message });
             }
         }
 
@@ -841,20 +1277,59 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                if (filter == null)
+                {
+                    filter = new ActivityFilterDto();
+                }
+
+                // Validate date range if provided
+                if (filter.StartDate.HasValue && filter.EndDate.HasValue && filter.StartDate > filter.EndDate)
+                {
+                    return BadRequest(new { success = false, message = "Start date cannot be greater than end date." });
+                }
+
+                // Validate pagination
+                if (filter.Page < 1)
+                {
+                    filter.Page = 1;
+                }
+
+                if (filter.PageSize < 1 || filter.PageSize > 100)
+                {
+                    filter.PageSize = 20;
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await _adminService.CanUserAccessUserAsync(adminUserId, userId))
                 {
-                    return Forbid("Access denied.");
+                    return StatusCode(403, new { success = false, message = "Access denied." });
                 }
 
                 filter.UserId = userId;
                 var clientCode = GetClientCodeFromToken();
+                if (string.IsNullOrEmpty(clientCode))
+                {
+                    return BadRequest(new { success = false, message = "Client code not found in token." });
+                }
+
                 var activities = await _adminService.GetUserActivitiesAsync(filter, clientCode);
-                return Ok(activities);
+                return Ok(new { success = true, message = "User activities retrieved successfully.", data = activities, count = activities.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving user activities.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving user activities.", error = ex.Message });
             }
         }
 
@@ -873,13 +1348,19 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var summary = await _adminService.GetActivitySummaryAsync(adminUserId);
-                return Ok(summary);
+                return Ok(new { success = true, message = "Activity summary retrieved successfully.", data = summary });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving activity summary.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving activity summary.", error = ex.Message });
             }
         }
 
@@ -898,13 +1379,25 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (startDate > endDate)
+                {
+                    return BadRequest(new { success = false, message = "Start date cannot be greater than end date." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var summary = await _adminService.GetActivitySummaryByDateRangeAsync(adminUserId, startDate, endDate);
-                return Ok(summary);
+                return Ok(new { success = true, message = "Activity summary retrieved successfully.", data = summary });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving activity summary.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving activity summary.", error = ex.Message });
             }
         }
 
@@ -920,13 +1413,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
+                if (!await _adminService.CanUserAccessUserAsync(adminUserId, userId))
+                {
+                    return StatusCode(403, new { success = false, message = "Access denied." });
+                }
+
                 var summary = await _adminService.GetActivitySummaryByUserAsync(adminUserId, userId);
-                return Ok(summary);
+                return Ok(new { success = true, message = "Activity summary retrieved successfully.", data = summary });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving activity summary.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving activity summary.", error = ex.Message });
             }
         }
 
@@ -942,13 +1452,25 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (string.IsNullOrWhiteSpace(module))
+                {
+                    return BadRequest(new { success = false, message = "Module name is required." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var summary = await _adminService.GetActivitySummaryByModuleAsync(adminUserId, module);
-                return Ok(summary);
+                return Ok(new { success = true, message = "Activity summary retrieved successfully.", data = summary });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving activity summary.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving activity summary.", error = ex.Message });
             }
         }
 
@@ -967,13 +1489,19 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var hierarchy = await _adminService.GetUserHierarchyAsync(adminUserId);
-                return Ok(hierarchy);
+                return Ok(new { success = true, message = "User hierarchy retrieved successfully.", data = hierarchy });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving user hierarchy.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving user hierarchy.", error = ex.Message });
             }
         }
 
@@ -989,18 +1517,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (adminUserId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid admin user ID." });
+                }
+
+                // Validate current user ID
                 var currentUserId = GetCurrentUserId();
+                if (currentUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsMainAdminAsync(currentUserId))
                 {
-                    return Forbid("Only main admins can view other admin hierarchies.");
+                    return StatusCode(403, new { success = false, message = "Only main admins can view other admin hierarchies." });
                 }
 
                 var hierarchy = await _adminService.GetUserHierarchyByAdminAsync(adminUserId);
-                return Ok(hierarchy);
+                return Ok(new { success = true, message = "User hierarchy retrieved successfully.", data = hierarchy });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving user hierarchy.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving user hierarchy.", error = ex.Message });
             }
         }
 
@@ -1027,7 +1567,24 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (startDate.HasValue && endDate.HasValue && startDate > endDate)
+                {
+                    return BadRequest(new { success = false, message = "Start date cannot be greater than end date." });
+                }
+
+                if (userId.HasValue && userId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid user ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var filter = new ActivityFilterDto
                 {
                     StartDate = startDate,
@@ -1042,7 +1599,7 @@ namespace RfidAppApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while exporting activities.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while exporting activities.", error = ex.Message });
             }
         }
 
@@ -1057,13 +1614,24 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsAdminAsync(adminUserId))
                 {
-                    return Forbid("Only admins can export permissions.");
+                    return StatusCode(403, new { success = false, message = "Only admins can export permissions." });
                 }
 
                 var clientCode = GetClientCodeFromToken();
+                if (string.IsNullOrEmpty(clientCode))
+                {
+                    return BadRequest(new { success = false, message = "Client code not found in token." });
+                }
+
                 var csvData = await _adminService.ExportPermissionsToCsvAsync(clientCode);
                 
                 var fileName = $"user-permissions-{DateTime.Now:yyyyMMdd-HHmmss}.csv";
@@ -1071,7 +1639,7 @@ namespace RfidAppApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while exporting permissions.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while exporting permissions.", error = ex.Message });
             }
         }
 
@@ -1090,13 +1658,19 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var dashboard = await _adminService.GetAdminDashboardAsync(adminUserId);
-                return Ok(dashboard);
+                return Ok(new { success = true, message = "Dashboard data retrieved successfully.", data = dashboard });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving dashboard data.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving dashboard data.", error = ex.Message });
             }
         }
 
@@ -1111,19 +1685,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsMainAdminAsync(adminUserId))
                 {
-                    return Forbid("Only main admins can view organization dashboard.");
+                    return StatusCode(403, new { success = false, message = "Only main admins can view organization dashboard." });
                 }
 
                 var clientCode = GetClientCodeFromToken();
+                if (string.IsNullOrEmpty(clientCode))
+                {
+                    return BadRequest(new { success = false, message = "Client code not found in token." });
+                }
+
                 var dashboard = await _adminService.GetOrganizationDashboardAsync(clientCode);
-                return Ok(dashboard);
+                return Ok(new { success = true, message = "Organization dashboard retrieved successfully.", data = dashboard });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving organization dashboard.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving organization dashboard.", error = ex.Message });
             }
         }
 
@@ -1138,19 +1723,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 if (!await IsMainAdminAsync(adminUserId))
                 {
-                    return Forbid("Only main admins can view all organization users.");
+                    return StatusCode(403, new { success = false, message = "Only main admins can view all organization users." });
                 }
 
                 var clientCode = GetClientCodeFromToken();
+                if (string.IsNullOrEmpty(clientCode))
+                {
+                    return BadRequest(new { success = false, message = "Client code not found in token." });
+                }
+
                 var users = await _adminService.GetAllUsersInOrganizationAsync(clientCode);
-                return Ok(users);
+                return Ok(new { success = true, message = "Organization users retrieved successfully.", data = users, count = users.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving organization users.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving organization users.", error = ex.Message });
             }
         }
 
@@ -1169,15 +1765,25 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var clientCode = GetClientCodeFromToken();
+                if (string.IsNullOrEmpty(clientCode))
+                {
+                    return BadRequest(new { success = false, message = "Client code not found in token." });
+                }
                 
                 var branches = await _adminService.GetBranchesAsync(clientCode);
-                return Ok(branches);
+                return Ok(new { success = true, message = "Branches retrieved successfully.", data = branches, count = branches.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving branches.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving branches.", error = ex.Message });
             }
         }
 
@@ -1193,15 +1799,31 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (branchId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid branch ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var clientCode = GetClientCodeFromToken();
+                if (string.IsNullOrEmpty(clientCode))
+                {
+                    return BadRequest(new { success = false, message = "Client code not found in token." });
+                }
                 
                 var counters = await _adminService.GetCountersByBranchAsync(branchId, clientCode);
-                return Ok(counters);
+                return Ok(new { success = true, message = "Counters retrieved successfully.", data = counters, count = counters.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving counters.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving counters.", error = ex.Message });
             }
         }
 
@@ -1220,13 +1842,30 @@ namespace RfidAppApi.Controllers
         {
             try
             {
+                // Validate parameters
+                if (branchId.HasValue && branchId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid branch ID." });
+                }
+
+                if (counterId.HasValue && counterId <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid counter ID." });
+                }
+
+                // Validate admin user ID
                 var adminUserId = GetCurrentUserId();
+                if (adminUserId <= 0)
+                {
+                    return Unauthorized(new { success = false, message = "Invalid user authentication." });
+                }
+
                 var users = await _adminService.GetUsersByLocationAsync(adminUserId, branchId, counterId);
-                return Ok(users);
+                return Ok(new { success = true, message = "Users retrieved successfully.", data = users, count = users.Count() });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while retrieving users by location.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving users by location.", error = ex.Message });
             }
         }
 
@@ -1265,6 +1904,8 @@ namespace RfidAppApi.Controllers
     /// </summary>
     public class AdminResetPasswordDto
     {
+        [Required(ErrorMessage = "New password is required.")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be between 6 and 100 characters.")]
         public string NewPassword { get; set; } = string.Empty;
     }
 
@@ -1273,8 +1914,11 @@ namespace RfidAppApi.Controllers
     /// </summary>
     public class ActivateUserDto
     {
+        [Required(ErrorMessage = "User ID is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "User ID must be greater than 0.")]
         public int UserId { get; set; }
         public bool IsActive { get; set; }
+        [StringLength(500)]
         public string? Remarks { get; set; }
     }
 
@@ -1283,8 +1927,11 @@ namespace RfidAppApi.Controllers
     /// </summary>
     public class DeactivateUserDto
     {
+        [Required(ErrorMessage = "User ID is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "User ID must be greater than 0.")]
         public int UserId { get; set; }
         public bool IsActive { get; set; }
+        [StringLength(500)]
         public string? Remarks { get; set; }
     }
 

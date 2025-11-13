@@ -148,7 +148,13 @@
             <summary>
             Get user activities with filters
             </summary>
-            <param name="filter">Activity filter parameters</param>
+            <param name="startDate">Start date for filtering activities</param>
+            <param name="endDate">End date for filtering activities</param>
+            <param name="userId">User ID to filter activities (optional)</param>
+            <param name="activityType">Activity type to filter (optional)</param>
+            <param name="action">Action name to filter (optional)</param>
+            <param name="page">Page number for pagination (default: 1)</param>
+            <param name="pageSize">Page size for pagination (default: 20, max: 100)</param>
             <returns>List of user activities</returns>
         </member>
         <member name="M:RfidAppApi.Controllers.AdminController.GetUserActivitiesByUser(System.Int32)">
@@ -297,6 +303,72 @@
         <member name="T:RfidAppApi.Controllers.DeactivateUserDto">
             <summary>
             DTO for deactivating user
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Controllers.DashboardController">
+            <summary>
+            Controller for dashboard analytics and reporting
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetDashboardSummary">
+            <summary>
+            Get comprehensive dashboard summary with all important metrics in one call
+            Returns: Total products, sold products, weights (gross/net/stone), sales metrics, customer metrics, category/branch metrics, inventory value, and RFID metrics
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetDashboard">
+            <summary>
+            Get comprehensive dashboard data
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetTotalProductCount">
+            <summary>
+            Get total product count
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetTotalSoldProducts">
+            <summary>
+            Get total sold products count
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetRecentlyAddedProducts(System.Int32)">
+            <summary>
+            Get recently added products
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetSalesOverMonth(System.Int32)">
+            <summary>
+            Get sales data over months
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetSalesMonthGrowth">
+            <summary>
+            Get sales month growth percentage
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetUserProductCreations">
+            <summary>
+            Get which user added which products
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetTopSellingProducts(System.Int32)">
+            <summary>
+            Get top selling products
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetTotalWeightByCategory">
+            <summary>
+            Get total weight of all products by category
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.GetCustomerSummary">
+            <summary>
+            Get customer summary information
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.DashboardController.ExportDashboardDataToExcel">
+            <summary>
+            Download all dashboard data in Excel format
             </summary>
         </member>
         <member name="T:RfidAppApi.Controllers.DatabaseMigrationController">
@@ -2065,6 +2137,56 @@
             DTO for user hierarchy item
             </summary>
         </member>
+        <member name="T:RfidAppApi.DTOs.DashboardDto">
+            <summary>
+            DTO for comprehensive dashboard data
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.RecentlyAddedProductDto">
+            <summary>
+            DTO for recently added products
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.MonthlySalesDto">
+            <summary>
+            DTO for monthly sales data
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.UserProductCreationDto">
+            <summary>
+            DTO for user product creation tracking
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.ProductCreationDetailDto">
+            <summary>
+            DTO for product creation detail
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.TopSellingProductDto">
+            <summary>
+            DTO for top selling products
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.CategoryWeightDto">
+            <summary>
+            DTO for category weight summary
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.CustomerSummaryDto">
+            <summary>
+            DTO for customer summary
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.TopCustomerDto">
+            <summary>
+            DTO for top customers
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.DashboardSummaryDto">
+            <summary>
+            Comprehensive dashboard summary with all important metrics in one response
+            </summary>
+        </member>
         <member name="T:RfidAppApi.DTOs.ProductExcelUploadDto">
             <summary>
             DTO for Product Excel upload request
@@ -3329,6 +3451,11 @@
             Gets users by branch and counter location
             </summary>
         </member>
+        <member name="T:RfidAppApi.Services.DashboardService">
+            <summary>
+            Service for dashboard analytics and reporting
+            </summary>
+        </member>
         <member name="M:RfidAppApi.Services.DatabaseMigrationService.MigrateClientDatabaseAsync(System.String)">
             <summary>
             Comprehensive migration for a single client database
@@ -3471,6 +3598,71 @@
         <member name="M:RfidAppApi.Services.IClientDatabaseService.GetAllClientCodesAsync">
             <summary>
             Gets all client codes from the master database
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Services.IDashboardService">
+            <summary>
+            Interface for dashboard analytics service
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetDashboardDataAsync(System.String)">
+            <summary>
+            Get comprehensive dashboard data
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetTotalProductCountAsync(System.String)">
+            <summary>
+            Get total product count
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetTotalSoldProductsAsync(System.String)">
+            <summary>
+            Get total sold products count
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetRecentlyAddedProductsAsync(System.String,System.Int32)">
+            <summary>
+            Get recently added products
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetSalesOverMonthAsync(System.String,System.Int32)">
+            <summary>
+            Get sales data over months
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetSalesMonthGrowthAsync(System.String)">
+            <summary>
+            Get sales month growth percentage
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetUserProductCreationsAsync(System.String)">
+            <summary>
+            Get which user added which products
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetTopSellingProductsAsync(System.String,System.Int32)">
+            <summary>
+            Get top selling products
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetTotalWeightByCategoryAsync(System.String)">
+            <summary>
+            Get total weight of all products by category
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetCustomerSummaryAsync(System.String)">
+            <summary>
+            Get customer summary information
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.ExportDashboardDataToExcelAsync(System.String)">
+            <summary>
+            Export all dashboard data to Excel
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IDashboardService.GetDashboardSummaryAsync(System.String)">
+            <summary>
+            Get comprehensive dashboard summary with all important metrics in one call
             </summary>
         </member>
         <member name="M:RfidAppApi.Services.IDatabaseMigrationService.AddProductImageTableToClientAsync(System.String)">

@@ -64,6 +64,7 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IReportingService, ReportingService>();
 builder.Services.AddScoped<IStockVerificationService, StockVerificationService>();
 builder.Services.AddScoped<IStockTransferService, StockTransferService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 // Register ClientDbContextFactory
 builder.Services.AddScoped<ClientDbContextFactory>();

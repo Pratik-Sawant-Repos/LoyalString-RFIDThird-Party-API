@@ -1070,6 +1070,7 @@
           {
             "name": "startDate",
             "in": "query",
+            "description": "Start date for filtering activities",
             "schema": {
               "type": "string",
               "format": "date-time",
@@ -1080,6 +1081,7 @@
           {
             "name": "endDate",
             "in": "query",
+            "description": "End date for filtering activities",
             "schema": {
               "type": "string",
               "format": "date-time",
@@ -1090,6 +1092,7 @@
           {
             "name": "userId",
             "in": "query",
+            "description": "User ID to filter activities (optional)",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -1100,6 +1103,7 @@
           {
             "name": "activityType",
             "in": "query",
+            "description": "Activity type to filter (optional)",
             "schema": {
               "type": "string",
               "nullable": true
@@ -1109,6 +1113,7 @@
           {
             "name": "action",
             "in": "query",
+            "description": "Action name to filter (optional)",
             "schema": {
               "type": "string",
               "nullable": true
@@ -1118,6 +1123,7 @@
           {
             "name": "page",
             "in": "query",
+            "description": "Page number for pagination (default: 1)",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -1128,6 +1134,7 @@
           {
             "name": "pageSize",
             "in": "query",
+            "description": "Page size for pagination (default: 20, max: 100)",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -2061,6 +2068,469 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Dashboard/summary": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get comprehensive dashboard summary with all important metrics in one call\nReturns: Total products, sold products, weights (gross/net/stone), sales metrics, customer metrics, category/branch metrics, inventory value, and RFID metrics",
+        "operationId": "Dashboard_GetDashboardSummary",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get comprehensive dashboard data",
+        "operationId": "Dashboard_GetDashboard",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/total-products": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get total product count",
+        "operationId": "Dashboard_GetTotalProductCount",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/total-sold-products": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get total sold products count",
+        "operationId": "Dashboard_GetTotalSoldProducts",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/recently-added": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get recently added products",
+        "operationId": "Dashboard_GetRecentlyAddedProducts",
+        "parameters": [
+          {
+            "name": "count",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecentlyAddedProductDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/sales-over-month": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get sales data over months",
+        "operationId": "Dashboard_GetSalesOverMonth",
+        "parameters": [
+          {
+            "name": "months",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 12
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthlySalesDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/sales-growth": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get sales month growth percentage",
+        "operationId": "Dashboard_GetSalesMonthGrowth",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number",
+                  "format": "decimal"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/user-product-creations": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get which user added which products",
+        "operationId": "Dashboard_GetUserProductCreations",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserProductCreationDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/top-selling": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get top selling products",
+        "operationId": "Dashboard_GetTopSellingProducts",
+        "parameters": [
+          {
+            "name": "topCount",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopSellingProductDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/weight-by-category": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get total weight of all products by category",
+        "operationId": "Dashboard_GetTotalWeightByCategory",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryWeightDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/customer-summary": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get customer summary information",
+        "operationId": "Dashboard_GetCustomerSummary",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerSummaryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Dashboard/export-excel": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Download all dashboard data in Excel format",
+        "operationId": "Dashboard_ExportDashboardDataToExcel",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": ""
           }
         }
       }
@@ -12927,22 +13397,32 @@
         "properties": {
           "fullName": {
             "type": "string",
+            "maxLength": 150,
+            "minLength": 0,
             "nullable": true
           },
           "mobileNumber": {
             "type": "string",
+            "maxLength": 20,
+            "minLength": 0,
             "nullable": true
           },
           "city": {
             "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
             "nullable": true
           },
           "address": {
             "type": "string",
+            "maxLength": 255,
+            "minLength": 0,
             "nullable": true
           },
           "showroomType": {
             "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
             "nullable": true
           },
           "isActive": {
@@ -12976,16 +13456,23 @@
         "type": "object",
         "description": "DTO for activating user",
         "additionalProperties": false,
+        "required": [
+          "userId"
+        ],
         "properties": {
           "userId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "maximum": 2147483647.0,
+            "minimum": 1.0
           },
           "isActive": {
             "type": "boolean"
           },
           "remarks": {
             "type": "string",
+            "maxLength": 500,
+            "minLength": 0,
             "nullable": true
           }
         }
@@ -12994,16 +13481,23 @@
         "type": "object",
         "description": "DTO for deactivating user",
         "additionalProperties": false,
+        "required": [
+          "userId"
+        ],
         "properties": {
           "userId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "maximum": 2147483647.0,
+            "minimum": 1.0
           },
           "isActive": {
             "type": "boolean"
           },
           "remarks": {
             "type": "string",
+            "maxLength": 500,
+            "minLength": 0,
             "nullable": true
           }
         }
@@ -13012,9 +13506,14 @@
         "type": "object",
         "description": "DTO for admin resetting user password (different from user self-reset password flow)",
         "additionalProperties": false,
+        "required": [
+          "newPassword"
+        ],
         "properties": {
           "newPassword": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 6
           }
         }
       },
@@ -13409,6 +13908,412 @@
           },
           "branchName": {
             "type": "string"
+          }
+        }
+      },
+      "DashboardSummaryDto": {
+        "type": "object",
+        "description": "Comprehensive dashboard summary with all important metrics in one response",
+        "additionalProperties": false,
+        "properties": {
+          "totalProductCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "activeProductCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSoldProducts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recentlyAddedProductsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalGrossWeight": {
+            "type": "number",
+            "format": "float"
+          },
+          "totalNetWeight": {
+            "type": "number",
+            "format": "float"
+          },
+          "totalStoneWeight": {
+            "type": "number",
+            "format": "float"
+          },
+          "averageGrossWeight": {
+            "type": "number",
+            "format": "float"
+          },
+          "averageNetWeight": {
+            "type": "number",
+            "format": "float"
+          },
+          "totalRevenue": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalSalesAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalSalesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "averageOrderValue": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "salesMonthGrowth": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "currentMonthSales": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "previousMonthSales": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalCustomers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalInvoices": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "activeCustomers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCategories": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalBranches": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCounters": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "topCategoryName": {
+            "type": "string",
+            "nullable": true
+          },
+          "topCategoryProductCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalInventoryValue": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "averageProductPrice": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalRfidTags": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "usedRfidTags": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unusedRfidTags": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DashboardDto": {
+        "type": "object",
+        "description": "DTO for comprehensive dashboard data",
+        "additionalProperties": false,
+        "properties": {
+          "totalProductCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSoldProducts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "recentlyAddedProducts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecentlyAddedProductDto"
+            }
+          },
+          "salesOverMonth": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MonthlySalesDto"
+            }
+          },
+          "salesMonthGrowth": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "userProductCreations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserProductCreationDto"
+            }
+          },
+          "topSellingProducts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TopSellingProductDto"
+            }
+          },
+          "totalWeightByCategory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryWeightDto"
+            }
+          },
+          "customerSummary": {
+            "$ref": "#/components/schemas/CustomerSummaryDto"
+          }
+        }
+      },
+      "RecentlyAddedProductDto": {
+        "type": "object",
+        "description": "DTO for recently added products",
+        "additionalProperties": false,
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "itemCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "branchName": {
+            "type": "string"
+          },
+          "counterName": {
+            "type": "string"
+          },
+          "mrp": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "grossWeight": {
+            "type": "number",
+            "format": "float",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MonthlySalesDto": {
+        "type": "object",
+        "description": "DTO for monthly sales data",
+        "additionalProperties": false,
+        "properties": {
+          "month": {
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSalesCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSalesAmount": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      },
+      "UserProductCreationDto": {
+        "type": "object",
+        "description": "DTO for user product creation tracking",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "userEmail": {
+            "type": "string"
+          },
+          "productsCreated": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductCreationDetailDto"
+            }
+          }
+        }
+      },
+      "ProductCreationDetailDto": {
+        "type": "object",
+        "description": "DTO for product creation detail",
+        "additionalProperties": false,
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "itemCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TopSellingProductDto": {
+        "type": "object",
+        "description": "DTO for top selling products",
+        "additionalProperties": false,
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "itemCode": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "totalSold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSalesAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "averageSellingPrice": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
+      },
+      "CategoryWeightDto": {
+        "type": "object",
+        "description": "DTO for category weight summary",
+        "additionalProperties": false,
+        "properties": {
+          "categoryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "productCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalGrossWeight": {
+            "type": "number",
+            "format": "float"
+          },
+          "totalNetWeight": {
+            "type": "number",
+            "format": "float"
+          },
+          "totalStoneWeight": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "CustomerSummaryDto": {
+        "type": "object",
+        "description": "DTO for customer summary",
+        "additionalProperties": false,
+        "properties": {
+          "totalCustomers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalInvoices": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalRevenue": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "averageOrderValue": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "topCustomers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TopCustomerDto"
+            }
+          }
+        }
+      },
+      "TopCustomerDto": {
+        "type": "object",
+        "description": "DTO for top customers",
+        "additionalProperties": false,
+        "properties": {
+          "customerName": {
+            "type": "string"
+          },
+          "customerPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalPurchases": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSpent": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "lastPurchaseDate": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
