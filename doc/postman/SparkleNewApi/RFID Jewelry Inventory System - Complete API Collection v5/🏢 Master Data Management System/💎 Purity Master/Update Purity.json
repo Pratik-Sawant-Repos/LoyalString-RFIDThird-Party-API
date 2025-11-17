@@ -1,0 +1,36 @@
+{
+  "name": "Update Purity",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/MasterData/purities",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"purityId\": 1,\n  \"purityName\": \"22 Karat\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"purityId\": 1,\n  \"purityName\": \"22 Karat\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

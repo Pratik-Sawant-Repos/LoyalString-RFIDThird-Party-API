@@ -1,0 +1,36 @@
+{
+  "name": "Update User",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/User/{{userId}}",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"fullName\": \"John Doe Updated\",\n  \"mobileNumber\": \"+91-9876543211\",\n  \"city\": \"Pune\",\n  \"address\": \"456 Updated Street, Pune, Maharashtra, India\",\n  \"organisationName\": \"Premium Jewelry Store Updated\",\n  \"showroomType\": \"Premium\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"fullName\": \"John Doe Updated\",\n  \"mobileNumber\": \"+91-9876543211\",\n  \"city\": \"Pune\",\n  \"address\": \"456 Updated Street, Pune, Maharashtra, India\",\n  \"organisationName\": \"Premium Jewelry Store Updated\",\n  \"showroomType\": \"Premium\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Create Invoice with Multiple Payment Methods and GST (Pakka Bill)",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Invoice/with-multiple-payments",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"productId\": 2,\n  \"rfidCode\": \"RFID002\",\n  \"customerName\": \"Alice Johnson\",\n  \"customerPhone\": \"+91-9876543211\",\n  \"sellingPrice\": 100000.00,\n  \"discountAmount\": 5000.00,\n  \"finalAmount\": 97850.00,\n  \"isGstApplied\": true,\n  \"gstPercentage\": 3.00,\n  \"invoiceType\": \"Sale\",\n  \"paymentMethods\": [\n    {\n      \"paymentMethod\": \"Cash\",\n      \"amount\": 50000.00,\n      \"paymentReference\": \"CASH002\",\n      \"remarks\": \"Cash payment\"\n    },\n    {\n      \"paymentMethod\": \"Card\",\n      \"amount\": 47850.00,\n      \"paymentReference\": \"CARD123456789\",\n      \"remarks\": \"Credit card payment\"\n    }\n  ],\n  \"soldOn\": \"2024-01-15T11:00:00Z\",\n  \"remarks\": \"Pakka Bill - GST applied (3% on 95000 = 2850)\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"productId\": 2,\n  \"rfidCode\": \"RFID002\",\n  \"customerName\": \"Alice Johnson\",\n  \"customerPhone\": \"+91-9876543211\",\n  \"sellingPrice\": 100000.00,\n  \"discountAmount\": 5000.00,\n  \"finalAmount\": 97850.00,\n  \"isGstApplied\": true,\n  \"gstPercentage\": 3.00,\n  \"invoiceType\": \"Sale\",\n  \"paymentMethods\": [\n    {\n      \"paymentMethod\": \"Cash\",\n      \"amount\": 50000.00,\n      \"paymentReference\": \"CASH002\",\n      \"remarks\": \"Cash payment\"\n    },\n    {\n      \"paymentMethod\": \"Card\",\n      \"amount\": 47850.00,\n      \"paymentReference\": \"CARD123456789\",\n      \"remarks\": \"Credit card payment\"\n    }\n  ],\n  \"soldOn\": \"2024-01-15T11:00:00Z\",\n  \"remarks\": \"Pakka Bill - GST applied (3% on 95000 = 2850)\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

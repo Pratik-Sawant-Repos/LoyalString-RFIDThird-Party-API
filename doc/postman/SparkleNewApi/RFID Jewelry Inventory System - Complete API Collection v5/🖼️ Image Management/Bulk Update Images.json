@@ -1,0 +1,36 @@
+{
+  "name": "Bulk Update Images",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/ProductImage/bulk-update",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"imageIds\": [1, 2, 3],\n  \"imageType\": \"Secondary\",\n  \"displayOrder\": 2,\n  \"isActive\": true\n}",
+    "bodyContainer": {
+      "text": "{\n  \"imageIds\": [1, 2, 3],\n  \"imageType\": \"Secondary\",\n  \"displayOrder\": 2,\n  \"isActive\": true\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

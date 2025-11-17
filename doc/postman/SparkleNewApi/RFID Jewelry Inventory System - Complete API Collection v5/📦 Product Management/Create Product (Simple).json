@@ -1,0 +1,36 @@
+{
+  "name": "Create Product (Simple)",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Product/create",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": "if (rq.response.code === 200) {\n    const response = rq.response.json();\n    if (response.data && response.data.id) {\n        rq.environment.set('productId', response.data.id);\n        console.log('Product created with ID:', response.data.id);\n    }\n}"
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"itemCode\": \"JWL001\",\n  \"categoryName\": \"Rings\",\n  \"branchName\": \"Main Branch\",\n  \"counterName\": \"Counter 1\",\n  \"productName\": \"Diamond Ring\",\n  \"designName\": \"Classic\",\n  \"purityName\": \"18K\",\n  \"rfidCode\": \"RFID001\",\n  \"grossWeight\": 5.5,\n  \"netWeight\": 4.8,\n  \"stoneWeight\": 0.5,\n  \"diamondHeight\": 2.5,\n  \"boxDetails\": \"Premium velvet box\",\n  \"size\": 18,\n  \"stoneAmount\": 15000,\n  \"diamondAmount\": 25000,\n  \"hallmarkAmount\": 500,\n  \"makingPerGram\": 100,\n  \"makingPercentage\": 15,\n  \"makingFixedAmount\": 2000,\n  \"mrp\": 65000,\n  \"status\": \"Active\",\n  \"customFields\": {\n    \"Ring Size\": \"7\",\n    \"Band Width\": \"4mm\",\n    \"Setting Type\": \"Prong\",\n    \"Stone Count\": \"1\",\n    \"Has Certificate\": \"true\",\n    \"Certificate Number\": \"CERT-2024-001\",\n    \"Manufacture Date\": \"2024-01-15\",\n    \"Designer Name\": \"John Smith\"\n  }\n}",
+    "bodyContainer": {
+      "text": "{\n  \"itemCode\": \"JWL001\",\n  \"categoryName\": \"Rings\",\n  \"branchName\": \"Main Branch\",\n  \"counterName\": \"Counter 1\",\n  \"productName\": \"Diamond Ring\",\n  \"designName\": \"Classic\",\n  \"purityName\": \"18K\",\n  \"rfidCode\": \"RFID001\",\n  \"grossWeight\": 5.5,\n  \"netWeight\": 4.8,\n  \"stoneWeight\": 0.5,\n  \"diamondHeight\": 2.5,\n  \"boxDetails\": \"Premium velvet box\",\n  \"size\": 18,\n  \"stoneAmount\": 15000,\n  \"diamondAmount\": 25000,\n  \"hallmarkAmount\": 500,\n  \"makingPerGram\": 100,\n  \"makingPercentage\": 15,\n  \"makingFixedAmount\": 2000,\n  \"mrp\": 65000,\n  \"status\": \"Active\",\n  \"customFields\": {\n    \"Ring Size\": \"7\",\n    \"Band Width\": \"4mm\",\n    \"Setting Type\": \"Prong\",\n    \"Stone Count\": \"1\",\n    \"Has Certificate\": \"true\",\n    \"Certificate Number\": \"CERT-2024-001\",\n    \"Manufacture Date\": \"2024-01-15\",\n    \"Designer Name\": \"John Smith\"\n  }\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

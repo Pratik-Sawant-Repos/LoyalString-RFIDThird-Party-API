@@ -1,0 +1,30 @@
+{
+  "name": "Login User (Enhanced with Permissions)",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/User/login",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": "if (rq.response.code === 200) {\n    const response = rq.response.json();\n    if (response.token) {\n        rq.environment.set('authToken', response.token);\n        rq.environment.set('clientCode', response.user.clientCode);\n        rq.environment.set('userId', response.user.userId);\n        console.log('Authentication successful with permissions');\n        console.log('User has', response.permissions.length, 'permission modules');\n        console.log('Active permissions:', response.permissionSummary.activePermissions);\n        console.log('Accessible branches:', response.accessInfo.accessibleBranchIds);\n        console.log('Accessible counters:', response.accessInfo.accessibleCounterIds);\n    }\n}"
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"email\": \"admin@jewelrystore.com\",\n  \"password\": \"Admin@123\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"email\": \"admin@jewelrystore.com\",\n  \"password\": \"Admin@123\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

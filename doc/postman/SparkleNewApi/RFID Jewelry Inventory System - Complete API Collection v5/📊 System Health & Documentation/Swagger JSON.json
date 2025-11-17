@@ -1,0 +1,21 @@
+{
+  "name": "Swagger JSON",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/swagger/v1/swagger.json",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": null,
+    "bodyContainer": {},
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

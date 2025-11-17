@@ -1,0 +1,36 @@
+{
+  "name": "Create Invoice by Item Code with GST (Pakka Bill)",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Invoice/by-item-code",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"itemCode\": \"GOLD002\",\n  \"rfidCode\": \"RFID003\",\n  \"customerName\": \"Bob Wilson\",\n  \"customerPhone\": \"+91-9876543212\",\n  \"sellingPrice\": 80000.00,\n  \"discountAmount\": 2000.00,\n  \"finalAmount\": 80340.00,\n  \"isGstApplied\": true,\n  \"gstPercentage\": 3.00,\n  \"invoiceType\": \"Sale\",\n  \"paymentMethods\": [\n    {\n      \"paymentMethod\": \"UPI\",\n      \"amount\": 80340.00,\n      \"paymentReference\": \"UPI987654321\",\n      \"remarks\": \"UPI payment via Google Pay\"\n    }\n  ],\n  \"soldOn\": \"2024-01-15T12:00:00Z\",\n  \"remarks\": \"Pakka Bill - GST applied (3% on 78000 = 2340)\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"itemCode\": \"GOLD002\",\n  \"rfidCode\": \"RFID003\",\n  \"customerName\": \"Bob Wilson\",\n  \"customerPhone\": \"+91-9876543212\",\n  \"sellingPrice\": 80000.00,\n  \"discountAmount\": 2000.00,\n  \"finalAmount\": 80340.00,\n  \"isGstApplied\": true,\n  \"gstPercentage\": 3.00,\n  \"invoiceType\": \"Sale\",\n  \"paymentMethods\": [\n    {\n      \"paymentMethod\": \"UPI\",\n      \"amount\": 80340.00,\n      \"paymentReference\": \"UPI987654321\",\n      \"remarks\": \"UPI payment via Google Pay\"\n    }\n  ],\n  \"soldOn\": \"2024-01-15T12:00:00Z\",\n  \"remarks\": \"Pakka Bill - GST applied (3% on 78000 = 2340)\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

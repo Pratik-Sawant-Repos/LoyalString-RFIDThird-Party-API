@@ -1,0 +1,36 @@
+{
+  "name": "Update Category",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/MasterData/categories",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"categoryId\": 1,\n  \"categoryName\": \"Premium Gold Rings\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"categoryId\": 1,\n  \"categoryName\": \"Premium Gold Rings\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

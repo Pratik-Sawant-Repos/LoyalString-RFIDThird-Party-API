@@ -1,0 +1,36 @@
+{
+  "name": "Create RFID",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Rfid",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"rfidCode\": \"RFID005\",\n  \"epcValue\": \"RFID005\",\n  \"clientCode\": \"{{clientCode}}\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"rfidCode\": \"RFID005\",\n  \"epcValue\": \"RFID005\",\n  \"clientCode\": \"{{clientCode}}\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Update User",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Admin/users/{{subUserId}}",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": "if (rq.response.code === 200) {\n    const response = rq.response.json();\n    if (response.success) {\n        console.log('✅', response.message);\n    }\n} else if (rq.response.code === 400 || rq.response.code === 401 || rq.response.code === 403 || rq.response.code === 404) {\n    const error = rq.response.json();\n    console.error('❌', error.message || 'Request failed');\n    if (error.errors) {\n        console.error('Validation errors:', error.errors);\n    }\n}"
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"fullName\": \"Updated User Name\",\n  \"mobileNumber\": \"+91-9876543210\",\n  \"city\": \"Updated City\",\n  \"address\": \"Updated Address\",\n  \"isActive\": true\n}",
+    "bodyContainer": {
+      "text": "{\n  \"fullName\": \"Updated User Name\",\n  \"mobileNumber\": \"+91-9876543210\",\n  \"city\": \"Updated City\",\n  \"address\": \"Updated Address\",\n  \"isActive\": true\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

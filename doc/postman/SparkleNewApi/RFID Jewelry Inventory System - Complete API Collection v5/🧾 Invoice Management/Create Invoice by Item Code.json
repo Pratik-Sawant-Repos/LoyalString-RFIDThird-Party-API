@@ -1,0 +1,36 @@
+{
+  "name": "Create Invoice by Item Code",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Invoice/by-item-code",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"itemCode\": \"GOLD001\",\n  \"rfidCode\": \"RFID002\",\n  \"customerName\": \"Alice Johnson\",\n  \"customerPhone\": \"+91-9876543211\",\n  \"sellingPrice\": 75000.00,\n  \"discountAmount\": 3000.00,\n  \"finalAmount\": 72000.00,\n  \"isGstApplied\": false,\n  \"gstPercentage\": 3.00,\n  \"invoiceType\": \"Sale\",\n  \"paymentMethods\": [\n    {\n      \"paymentMethod\": \"Card\",\n      \"amount\": 72000.00,\n      \"paymentReference\": \"CARD123456789\",\n      \"remarks\": \"Credit card payment\"\n    }\n  ],\n  \"soldOn\": \"2024-01-15T11:00:00Z\",\n  \"remarks\": \"Kaccha Bill - Customer paid via credit card\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"itemCode\": \"GOLD001\",\n  \"rfidCode\": \"RFID002\",\n  \"customerName\": \"Alice Johnson\",\n  \"customerPhone\": \"+91-9876543211\",\n  \"sellingPrice\": 75000.00,\n  \"discountAmount\": 3000.00,\n  \"finalAmount\": 72000.00,\n  \"isGstApplied\": false,\n  \"gstPercentage\": 3.00,\n  \"invoiceType\": \"Sale\",\n  \"paymentMethods\": [\n    {\n      \"paymentMethod\": \"Card\",\n      \"amount\": 72000.00,\n      \"paymentReference\": \"CARD123456789\",\n      \"remarks\": \"Credit card payment\"\n    }\n  ],\n  \"soldOn\": \"2024-01-15T11:00:00Z\",\n  \"remarks\": \"Kaccha Bill - Customer paid via credit card\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

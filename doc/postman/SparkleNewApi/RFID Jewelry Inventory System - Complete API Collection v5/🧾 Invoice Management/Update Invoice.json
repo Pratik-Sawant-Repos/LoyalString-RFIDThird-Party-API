@@ -1,0 +1,36 @@
+{
+  "name": "Update Invoice",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Invoice/1",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"customerName\": \"John Smith Updated\",\n  \"customerPhone\": \"+91-9876543211\",\n  \"sellingPrice\": 95000.00,\n  \"discountAmount\": 7000.00,\n  \"finalAmount\": 88000.00,\n  \"paymentMethod\": \"Card\",\n  \"remarks\": \"Customer requested additional discount\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"customerName\": \"John Smith Updated\",\n  \"customerPhone\": \"+91-9876543211\",\n  \"sellingPrice\": 95000.00,\n  \"discountAmount\": 7000.00,\n  \"finalAmount\": 88000.00,\n  \"paymentMethod\": \"Card\",\n  \"remarks\": \"Customer requested additional discount\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

@@ -84,6 +84,14 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 // Register User Profile Service
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
+// Register Customer and Quotation Services
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IQuotationService, QuotationService>();
+
+// Register Webhook Service
+builder.Services.AddScoped<IWebhookService, WebhookService>();
+builder.Services.AddHttpClient();
+
 // Register HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 

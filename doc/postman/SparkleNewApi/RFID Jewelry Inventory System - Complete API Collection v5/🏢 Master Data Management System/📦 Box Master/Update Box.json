@@ -1,0 +1,36 @@
+{
+  "name": "Update Box",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/MasterData/boxes",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"boxId\": 1,\n  \"boxName\": \"Premium Wooden Box\",\n  \"description\": \"High quality wooden jewelry box with velvet lining\",\n  \"boxType\": \"Wooden\",\n  \"size\": \"Large\",\n  \"color\": \"Dark Brown\",\n  \"material\": \"Wood\",\n  \"isActive\": true\n}",
+    "bodyContainer": {
+      "text": "{\n  \"boxId\": 1,\n  \"boxName\": \"Premium Wooden Box\",\n  \"description\": \"High quality wooden jewelry box with velvet lining\",\n  \"boxType\": \"Wooden\",\n  \"size\": \"Large\",\n  \"color\": \"Dark Brown\",\n  \"material\": \"Wood\",\n  \"isActive\": true\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

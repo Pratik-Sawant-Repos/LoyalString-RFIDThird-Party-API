@@ -1,0 +1,36 @@
+{
+  "name": "Create Stock Transfer",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/StockTransfer",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"productId\": 123,\n  \"rfidCode\": \"RFID001\",\n  \"transferType\": \"Branch\",\n  \"sourceBranchId\": 1,\n  \"sourceCounterId\": 5,\n  \"sourceBoxId\": 10,\n  \"destinationBranchId\": 2,\n  \"destinationCounterId\": 8,\n  \"destinationBoxId\": 15,\n  \"reason\": \"Inventory rebalancing\",\n  \"remarks\": \"Moving to high-demand location\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"productId\": 123,\n  \"rfidCode\": \"RFID001\",\n  \"transferType\": \"Branch\",\n  \"sourceBranchId\": 1,\n  \"sourceCounterId\": 5,\n  \"sourceBoxId\": 10,\n  \"destinationBranchId\": 2,\n  \"destinationCounterId\": 8,\n  \"destinationBoxId\": 15,\n  \"reason\": \"Inventory rebalancing\",\n  \"remarks\": \"Moving to high-demand location\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

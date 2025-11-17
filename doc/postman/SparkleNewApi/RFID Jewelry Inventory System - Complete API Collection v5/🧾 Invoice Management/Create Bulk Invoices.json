@@ -1,0 +1,36 @@
+{
+  "name": "Create Bulk Invoices",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Invoice/bulk",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"invoices\": [\n    {\n      \"productId\": 1,\n      \"rfidCode\": \"RFID001\",\n      \"customerName\": \"Alice Johnson\",\n      \"customerPhone\": \"+91-9876543212\",\n      \"sellingPrice\": 95000.00,\n      \"discountAmount\": 5000.00,\n      \"finalAmount\": 90000.00,\n      \"invoiceType\": \"Sale\",\n      \"paymentMethod\": \"Cash\",\n      \"remarks\": \"Bulk sale 1\"\n    },\n    {\n      \"productId\": 2,\n      \"rfidCode\": \"RFID002\",\n      \"customerName\": \"Bob Wilson\",\n      \"customerPhone\": \"+91-9876543213\",\n      \"sellingPrice\": 75000.00,\n      \"discountAmount\": 3000.00,\n      \"finalAmount\": 72000.00,\n      \"invoiceType\": \"Sale\",\n      \"paymentMethod\": \"Card\",\n      \"remarks\": \"Bulk sale 2\"\n    }\n  ]\n}",
+    "bodyContainer": {
+      "text": "{\n  \"invoices\": [\n    {\n      \"productId\": 1,\n      \"rfidCode\": \"RFID001\",\n      \"customerName\": \"Alice Johnson\",\n      \"customerPhone\": \"+91-9876543212\",\n      \"sellingPrice\": 95000.00,\n      \"discountAmount\": 5000.00,\n      \"finalAmount\": 90000.00,\n      \"invoiceType\": \"Sale\",\n      \"paymentMethod\": \"Cash\",\n      \"remarks\": \"Bulk sale 1\"\n    },\n    {\n      \"productId\": 2,\n      \"rfidCode\": \"RFID002\",\n      \"customerName\": \"Bob Wilson\",\n      \"customerPhone\": \"+91-9876543213\",\n      \"sellingPrice\": 75000.00,\n      \"discountAmount\": 3000.00,\n      \"finalAmount\": 72000.00,\n      \"invoiceType\": \"Sale\",\n      \"paymentMethod\": \"Card\",\n      \"remarks\": \"Bulk sale 2\"\n    }\n  ]\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

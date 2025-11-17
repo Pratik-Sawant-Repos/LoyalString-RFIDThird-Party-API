@@ -1,0 +1,36 @@
+{
+  "name": "Bulk Delete Images",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/ProductImage/bulk-delete",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "DELETE",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "[1, 2, 3]",
+    "bodyContainer": {
+      "text": "[1, 2, 3]"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

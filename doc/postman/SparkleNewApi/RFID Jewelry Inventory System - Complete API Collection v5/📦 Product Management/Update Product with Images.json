@@ -1,0 +1,284 @@
+{
+  "name": "Update Product with Images",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Product/{{productId}}/with-images",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      }
+    ],
+    "body": [
+      {
+        "id": 1762753800122,
+        "key": "itemCode",
+        "value": "JWL001_UPDATED",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "categoryName",
+        "value": "Rings",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "branchName",
+        "value": "Main Branch",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "counterName",
+        "value": "Counter 1",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "productName",
+        "value": "Diamond Ring Updated",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "designName",
+        "value": "Classic",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "purityName",
+        "value": "18K",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "grossWeight",
+        "value": "5.8",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "netWeight",
+        "value": "5.1",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "stoneWeight",
+        "value": "0.6",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "diamondHeight",
+        "value": "2.8",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "boxDetails",
+        "value": "Premium velvet box updated",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "size",
+        "value": "19",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "stoneAmount",
+        "value": "16000",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "diamondAmount",
+        "value": "26000",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "hallmarkAmount",
+        "value": "600",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "makingPerGram",
+        "value": "110",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "makingPercentage",
+        "value": "16",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "makingFixedAmount",
+        "value": "2200",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "mrp",
+        "value": "68000",
+        "isEnabled": true
+      },
+      {
+        "id": 1762753800122,
+        "key": "status",
+        "value": "Active",
+        "isEnabled": true
+      }
+    ],
+    "bodyContainer": {
+      "form": [
+        {
+          "id": 1762753800122,
+          "key": "itemCode",
+          "value": "JWL001_UPDATED",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "categoryName",
+          "value": "Rings",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "branchName",
+          "value": "Main Branch",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "counterName",
+          "value": "Counter 1",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "productName",
+          "value": "Diamond Ring Updated",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "designName",
+          "value": "Classic",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "purityName",
+          "value": "18K",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "grossWeight",
+          "value": "5.8",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "netWeight",
+          "value": "5.1",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "stoneWeight",
+          "value": "0.6",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "diamondHeight",
+          "value": "2.8",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "boxDetails",
+          "value": "Premium velvet box updated",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "size",
+          "value": "19",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "stoneAmount",
+          "value": "16000",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "diamondAmount",
+          "value": "26000",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "hallmarkAmount",
+          "value": "600",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "makingPerGram",
+          "value": "110",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "makingPercentage",
+          "value": "16",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "makingFixedAmount",
+          "value": "2200",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "mrp",
+          "value": "68000",
+          "isEnabled": true
+        },
+        {
+          "id": 1762753800122,
+          "key": "status",
+          "value": "Active",
+          "isEnabled": true
+        }
+      ]
+    },
+    "contentType": "application/x-www-form-urlencoded",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "✏️ Update Profile Information",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/UserProfile/update",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": "if (rq.response.code === 200) {\n    const response = rq.response.json();\n    console.log('Profile updated successfully');\n    console.log('Profile completion:', response.isProfileComplete ? 'Complete' : 'Incomplete');\n}"
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"addressLine1\": \"123 Main Street\",\n  \"addressLine2\": \"Suite 100\",\n  \"city\": \"Mumbai\",\n  \"state\": \"Maharashtra\",\n  \"country\": \"India\",\n  \"postalCode\": \"400001\",\n  \"landmark\": \"Near Metro Station\",\n  \"bio\": \"Experienced jewelry store manager with 10+ years in the industry.\",\n  \"designation\": \"Store Manager\",\n  \"alternatePhone\": \"+91-9876543211\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"addressLine1\": \"123 Main Street\",\n  \"addressLine2\": \"Suite 100\",\n  \"city\": \"Mumbai\",\n  \"state\": \"Maharashtra\",\n  \"country\": \"India\",\n  \"postalCode\": \"400001\",\n  \"landmark\": \"Near Metro Station\",\n  \"bio\": \"Experienced jewelry store manager with 10+ years in the industry.\",\n  \"designation\": \"Store Manager\",\n  \"alternatePhone\": \"+91-9876543211\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Create Purity",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/MasterData/purities",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"purityName\": \"22K\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"purityName\": \"22K\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

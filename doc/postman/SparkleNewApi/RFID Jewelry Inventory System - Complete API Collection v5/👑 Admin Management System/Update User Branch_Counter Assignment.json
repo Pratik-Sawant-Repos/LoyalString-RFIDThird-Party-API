@@ -1,0 +1,36 @@
+{
+  "name": "Update User Branch_Counter Assignment",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Admin/users/{{counterUserId}}",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"fullName\": \"Counter User Updated\",\n  \"branchId\": {{branchId}},\n  \"counterId\": {{counterId}},\n  \"permissions\": [\n    {\n      \"module\": \"Product\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": true,\n      \"canExport\": true,\n      \"canImport\": true\n    },\n    {\n      \"module\": \"RFID\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": true,\n      \"canExport\": true,\n      \"canImport\": true\n    },\n    {\n      \"module\": \"Invoice\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": true,\n      \"canExport\": true,\n      \"canImport\": true\n    }\n  ]\n}",
+    "bodyContainer": {
+      "text": "{\n  \"fullName\": \"Counter User Updated\",\n  \"branchId\": {{branchId}},\n  \"counterId\": {{counterId}},\n  \"permissions\": [\n    {\n      \"module\": \"Product\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": true,\n      \"canExport\": true,\n      \"canImport\": true\n    },\n    {\n      \"module\": \"RFID\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": true,\n      \"canExport\": true,\n      \"canImport\": true\n    },\n    {\n      \"module\": \"Invoice\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": true,\n      \"canExport\": true,\n      \"canImport\": true\n    }\n  ]\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

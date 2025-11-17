@@ -1,0 +1,36 @@
+{
+  "name": "Create Category",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/MasterData/categories",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"categoryName\": \"Gold Rings\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"categoryName\": \"Gold Rings\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

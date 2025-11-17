@@ -1,0 +1,21 @@
+{
+  "name": "API Documentation (Swagger)",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": null,
+    "bodyContainer": {},
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

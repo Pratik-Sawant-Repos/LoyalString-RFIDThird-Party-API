@@ -1,0 +1,36 @@
+{
+  "name": "Create Stock Verification Session",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/StockVerification/create-session",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"verificationSessionName\": \"Morning Stock Check\",\n  \"description\": \"Daily morning stock verification for Gold category\",\n  \"verificationDate\": \"2024-01-15T00:00:00Z\",\n  \"verificationTime\": \"09:00:00\",\n  \"branchName\": \"Main Branch\",\n  \"counterName\": \"Counter 1\",\n  \"categoryId\": 1,\n  \"verifiedBy\": \"John Doe\",\n  \"remarks\": \"Regular morning verification\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"verificationSessionName\": \"Morning Stock Check\",\n  \"description\": \"Daily morning stock verification for Gold category\",\n  \"verificationDate\": \"2024-01-15T00:00:00Z\",\n  \"verificationTime\": \"09:00:00\",\n  \"branchName\": \"Main Branch\",\n  \"counterName\": \"Counter 1\",\n  \"categoryId\": 1,\n  \"verifiedBy\": \"John Doe\",\n  \"remarks\": \"Regular morning verification\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

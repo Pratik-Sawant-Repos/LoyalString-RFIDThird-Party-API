@@ -1,0 +1,36 @@
+{
+  "name": "Scan Products by EPC Value",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Rfid/scan",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"epcValue\": \"RFID001\",\n  \"epcValues\": [\"RFID001\", \"RFID002\", \"RFID003\"]\n}",
+    "bodyContainer": {
+      "text": "{\n  \"epcValue\": \"RFID001\",\n  \"epcValues\": [\"RFID001\", \"RFID002\", \"RFID003\"]\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

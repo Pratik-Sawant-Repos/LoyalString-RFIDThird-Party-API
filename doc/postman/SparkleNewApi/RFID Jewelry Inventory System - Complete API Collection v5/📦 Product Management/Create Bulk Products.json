@@ -1,0 +1,36 @@
+{
+  "name": "Create Bulk Products",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Product/bulk-create",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"products\": [\n    {\n      \"itemCode\": \"JWL003\",\n      \"categoryName\": \"Earrings\",\n      \"branchName\": \"Main Branch\",\n      \"counterName\": \"Counter 2\",\n      \"productName\": \"Diamond Earrings\",\n      \"designName\": \"Modern\",\n      \"purityName\": \"18K\",\n      \"rfidCode\": \"RFID003\",\n      \"grossWeight\": 3.2,\n      \"netWeight\": 2.8,\n      \"stoneWeight\": 0.8,\n      \"diamondHeight\": 1.8,\n      \"boxDetails\": \"Elegant box\",\n      \"size\": 16,\n      \"stoneAmount\": 18000,\n      \"diamondAmount\": 22000,\n      \"hallmarkAmount\": 400,\n      \"makingPerGram\": 90,\n      \"makingPercentage\": 12,\n      \"makingFixedAmount\": 1500,\n      \"mrp\": 45000,\n      \"status\": \"Active\",\n      \"customFields\": {\n        \"Earring Type\": \"Stud\",\n        \"Has Certificate\": \"true\",\n        \"Stone Shape\": \"Round\"\n      }\n    },\n    {\n      \"itemCode\": \"JWL004\",\n      \"categoryName\": \"Bracelets\",\n      \"branchName\": \"Main Branch\",\n      \"counterName\": \"Counter 2\",\n      \"productName\": \"Gold Bracelet\",\n      \"designName\": \"Traditional\",\n      \"purityName\": \"22K\",\n      \"rfidCode\": \"RFID004\",\n      \"grossWeight\": 8.5,\n      \"netWeight\": 7.8,\n      \"stoneWeight\": 0.6,\n      \"diamondHeight\": 2.2,\n      \"boxDetails\": \"Premium box\",\n      \"size\": 19,\n      \"stoneAmount\": 12000,\n      \"diamondAmount\": 18000,\n      \"hallmarkAmount\": 600,\n      \"makingPerGram\": 110,\n      \"makingPercentage\": 16,\n      \"makingFixedAmount\": 2500,\n      \"mrp\": 55000,\n      \"status\": \"Active\",\n      \"customFields\": {\n        \"Bracelet Length\": \"7 inches\",\n        \"Clasp Type\": \"Toggle\",\n        \"Style\": \"Traditional\"\n      }\n    }\n  ]\n}",
+    "bodyContainer": {
+      "text": "{\n  \"products\": [\n    {\n      \"itemCode\": \"JWL003\",\n      \"categoryName\": \"Earrings\",\n      \"branchName\": \"Main Branch\",\n      \"counterName\": \"Counter 2\",\n      \"productName\": \"Diamond Earrings\",\n      \"designName\": \"Modern\",\n      \"purityName\": \"18K\",\n      \"rfidCode\": \"RFID003\",\n      \"grossWeight\": 3.2,\n      \"netWeight\": 2.8,\n      \"stoneWeight\": 0.8,\n      \"diamondHeight\": 1.8,\n      \"boxDetails\": \"Elegant box\",\n      \"size\": 16,\n      \"stoneAmount\": 18000,\n      \"diamondAmount\": 22000,\n      \"hallmarkAmount\": 400,\n      \"makingPerGram\": 90,\n      \"makingPercentage\": 12,\n      \"makingFixedAmount\": 1500,\n      \"mrp\": 45000,\n      \"status\": \"Active\",\n      \"customFields\": {\n        \"Earring Type\": \"Stud\",\n        \"Has Certificate\": \"true\",\n        \"Stone Shape\": \"Round\"\n      }\n    },\n    {\n      \"itemCode\": \"JWL004\",\n      \"categoryName\": \"Bracelets\",\n      \"branchName\": \"Main Branch\",\n      \"counterName\": \"Counter 2\",\n      \"productName\": \"Gold Bracelet\",\n      \"designName\": \"Traditional\",\n      \"purityName\": \"22K\",\n      \"rfidCode\": \"RFID004\",\n      \"grossWeight\": 8.5,\n      \"netWeight\": 7.8,\n      \"stoneWeight\": 0.6,\n      \"diamondHeight\": 2.2,\n      \"boxDetails\": \"Premium box\",\n      \"size\": 19,\n      \"stoneAmount\": 12000,\n      \"diamondAmount\": 18000,\n      \"hallmarkAmount\": 600,\n      \"makingPerGram\": 110,\n      \"makingPercentage\": 16,\n      \"makingFixedAmount\": 2500,\n      \"mrp\": 55000,\n      \"status\": \"Active\",\n      \"customFields\": {\n        \"Bracelet Length\": \"7 inches\",\n        \"Clasp Type\": \"Toggle\",\n        \"Style\": \"Traditional\"\n      }\n    }\n  ]\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

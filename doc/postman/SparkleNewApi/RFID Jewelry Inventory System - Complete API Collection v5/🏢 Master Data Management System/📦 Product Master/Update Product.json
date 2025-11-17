@@ -1,0 +1,36 @@
+{
+  "name": "Update Product",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/MasterData/products",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"productId\": 1,\n  \"productName\": \"Premium Gold Ring\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"productId\": 1,\n  \"productName\": \"Premium Gold Ring\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

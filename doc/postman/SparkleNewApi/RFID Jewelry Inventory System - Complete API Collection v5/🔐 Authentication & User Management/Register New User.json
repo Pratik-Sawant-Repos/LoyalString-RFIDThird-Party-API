@@ -1,0 +1,30 @@
+{
+  "name": "Register New User",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/User/register",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": "if (rq.response.code === 201) {\n    const response = rq.response.json();\n    if (response.clientCode) {\n        rq.environment.set('clientCode', response.clientCode);\n        rq.environment.set('userId', response.userId);\n        console.log('User registered successfully with client code:', response.clientCode);\n    }\n}"
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"userName\": \"admin@jewelrystore.com\",\n  \"email\": \"admin@jewelrystore.com\",\n  \"password\": \"Admin@123\",\n  \"fullName\": \"John Doe\",\n  \"mobileNumber\": \"+91-9876543210\",\n  \"city\": \"Mumbai\",\n  \"address\": \"123 Jewelry Street, Mumbai, Maharashtra, India\",\n  \"organisationName\": \"Premium Jewelry Store\",\n  \"showroomType\": \"Premium\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"userName\": \"admin@jewelrystore.com\",\n  \"email\": \"admin@jewelrystore.com\",\n  \"password\": \"Admin@123\",\n  \"fullName\": \"John Doe\",\n  \"mobileNumber\": \"+91-9876543210\",\n  \"city\": \"Mumbai\",\n  \"address\": \"123 Jewelry Street, Mumbai, Maharashtra, India\",\n  \"organisationName\": \"Premium Jewelry Store\",\n  \"showroomType\": \"Premium\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

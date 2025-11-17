@@ -17,6 +17,10 @@ namespace RfidAppApi.Data
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
+        
+        // Webhook Management
+        public DbSet<WebhookSubscription> WebhookSubscriptions { get; set; }
+        public DbSet<WebhookEvent> WebhookEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +34,8 @@ namespace RfidAppApi.Data
             modelBuilder.Entity<Permission>().ToTable("tblPermission");
             modelBuilder.Entity<UserActivity>().ToTable("tblUserActivity");
             modelBuilder.Entity<UserPermission>().ToTable("tblUserPermission");
+            modelBuilder.Entity<WebhookSubscription>().ToTable("tblWebhookSubscription");
+            modelBuilder.Entity<WebhookEvent>().ToTable("tblWebhookEvent");
 
             // Configure relationships
             modelBuilder.Entity<UserRole>()
@@ -119,6 +125,22 @@ namespace RfidAppApi.Data
             modelBuilder.Entity<UserProfile>()
                 .HasIndex(up => up.UserId)
                 .IsUnique();
+
+            // Configure Webhook indexes
+            modelBuilder.Entity<WebhookSubscription>()
+                .HasIndex(w => new { w.ClientCode, w.EventType });
+
+            modelBuilder.Entity<WebhookSubscription>()
+                .HasIndex(w => w.ClientCode);
+
+            modelBuilder.Entity<WebhookEvent>()
+                .HasIndex(w => new { w.ClientCode, w.Status });
+
+            modelBuilder.Entity<WebhookEvent>()
+                .HasIndex(w => new { w.ClientCode, w.EventType, w.CreatedOn });
+
+            modelBuilder.Entity<WebhookEvent>()
+                .HasIndex(w => w.NextRetryAt);
         }
     }
 } 

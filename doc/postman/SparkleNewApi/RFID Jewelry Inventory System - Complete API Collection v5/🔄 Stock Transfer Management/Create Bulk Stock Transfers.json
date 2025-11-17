@@ -1,0 +1,36 @@
+{
+  "name": "Create Bulk Stock Transfers",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/StockTransfer/bulk",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"transfers\": [\n    {\n      \"productId\": 123,\n      \"sourceBranchId\": 1,\n      \"sourceCounterId\": 5,\n      \"destinationBranchId\": 2,\n      \"destinationCounterId\": 8\n    },\n    {\n      \"productId\": 124,\n      \"sourceBranchId\": 1,\n      \"sourceCounterId\": 5,\n      \"destinationBranchId\": 2,\n      \"destinationCounterId\": 8\n    }\n  ],\n  \"commonReason\": \"Monthly inventory rebalancing\",\n  \"commonRemarks\": \"Standard monthly transfer process\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"transfers\": [\n    {\n      \"productId\": 123,\n      \"sourceBranchId\": 1,\n      \"sourceCounterId\": 5,\n      \"destinationBranchId\": 2,\n      \"destinationCounterId\": 8\n    },\n    {\n      \"productId\": 124,\n      \"sourceBranchId\": 1,\n      \"sourceCounterId\": 5,\n      \"destinationBranchId\": 2,\n      \"destinationCounterId\": 8\n    }\n  ],\n  \"commonReason\": \"Monthly inventory rebalancing\",\n  \"commonRemarks\": \"Standard monthly transfer process\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

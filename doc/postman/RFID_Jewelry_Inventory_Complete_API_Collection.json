@@ -2774,6 +2774,689 @@
 			]
 		},
 		{
+			"name": "👥 Customer Management",
+			"item": [
+				{
+					"name": "Get All Customers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Customer",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Customer"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Customer/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Customer", "1"]
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('customerId', response.data.id);",
+									"        console.log('Customer ID saved:', response.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Search Customers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Customer/search?searchTerm=john",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Customer", "search"],
+							"query": [
+								{
+									"key": "searchTerm",
+									"value": "john"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerName\": \"John Smith\",\n  \"email\": \"john.smith@example.com\",\n  \"mobileNumber\": \"+91-9876543210\",\n  \"alternatePhone\": \"+91-9876543211\",\n  \"address\": \"123 Main Street, Mumbai, Maharashtra\",\n  \"city\": \"Mumbai\",\n  \"state\": \"Maharashtra\",\n  \"pinCode\": \"400001\",\n  \"country\": \"India\",\n  \"customerType\": \"Individual\",\n  \"companyName\": null,\n  \"gstNumber\": null,\n  \"notes\": \"Regular customer, prefers gold jewelry\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Customer",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Customer"]
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('customerId', response.data.id);",
+									"        console.log('Customer created with ID:', response.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Create Business Customer with GST",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerName\": \"Premium Jewelry Store\",\n  \"email\": \"contact@premiumjewelry.com\",\n  \"mobileNumber\": \"+91-9876543222\",\n  \"alternatePhone\": \"+91-9876543223\",\n  \"address\": \"456 Business Avenue, New Delhi\",\n  \"city\": \"New Delhi\",\n  \"state\": \"Delhi\",\n  \"pinCode\": \"110001\",\n  \"country\": \"India\",\n  \"customerType\": \"Business\",\n  \"companyName\": \"Premium Jewelry Store Pvt Ltd\",\n  \"gstNumber\": \"27AABCU9603R1ZX\",\n  \"notes\": \"Bulk orders, requires GST invoices\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Customer",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Customer"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerName\": \"John Smith Updated\",\n  \"mobileNumber\": \"+91-9876543212\",\n  \"address\": \"123 Main Street, Updated Address, Mumbai\",\n  \"notes\": \"Updated customer information\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Customer/{{customerId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Customer", "{{customerId}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Customer/{{customerId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Customer", "{{customerId}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "📋 Quotation Management",
+			"item": [
+				{
+					"name": "Get All Quotations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Quotation by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation", "1"]
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('quotationId', response.data.id);",
+									"        console.log('Quotation ID saved:', response.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Quotations by Customer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation/customer/{{customerId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation", "customer", "{{customerId}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Quotation (Single Product)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": 1,\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"itemCode\": \"ITEM001\",\n      \"rfidCode\": \"RFID001\",\n      \"grossWeight\": 10.500,\n      \"stoneWeight\": 0.500,\n      \"netWeight\": 10.000,\n      \"goldRate\": 5500.00,\n      \"making\": 500.00,\n      \"makingType\": \"Fixed\",\n      \"stoneAmount\": 5000.00,\n      \"quantity\": 1,\n      \"remarks\": \"Beautiful gold ring\"\n    }\n  ],\n  \"oldMetalWeight\": null,\n  \"oldMetalRate\": null,\n  \"oldMetalAmount\": null,\n  \"paymentMode\": \"Cash\",\n  \"isGstApplied\": false,\n  \"gstPercentage\": 3.00,\n  \"validUntil\": \"2024-12-31T23:59:59Z\",\n  \"remarks\": \"Quotation valid for 30 days\",\n  \"sendEmail\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation"]
+						}
+					},
+					"response": [],
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.id) {",
+									"        pm.environment.set('quotationId', response.data.id);",
+									"        console.log('Quotation created with ID:', response.data.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					]
+				},
+				{
+					"name": "Create Quotation (Multiple Products)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": 1,\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"itemCode\": \"ITEM001\",\n      \"rfidCode\": \"RFID001\",\n      \"grossWeight\": 10.500,\n      \"stoneWeight\": 0.500,\n      \"netWeight\": 10.000,\n      \"goldRate\": 5500.00,\n      \"making\": 500.00,\n      \"makingType\": \"Fixed\",\n      \"stoneAmount\": 5000.00,\n      \"quantity\": 1,\n      \"remarks\": \"Gold ring\"\n    },\n    {\n      \"productId\": 2,\n      \"itemCode\": \"ITEM002\",\n      \"rfidCode\": \"RFID002\",\n      \"grossWeight\": 15.750,\n      \"stoneWeight\": 1.250,\n      \"netWeight\": 14.500,\n      \"goldRate\": 5500.00,\n      \"making\": 750.00,\n      \"makingType\": \"PerGram\",\n      \"stoneAmount\": 8000.00,\n      \"quantity\": 1,\n      \"remarks\": \"Gold necklace\"\n    }\n  ],\n  \"oldMetalWeight\": 5.000,\n  \"oldMetalRate\": 5000.00,\n  \"oldMetalAmount\": 25000.00,\n  \"paymentMode\": \"Card\",\n  \"isGstApplied\": true,\n  \"gstPercentage\": 3.00,\n  \"validUntil\": \"2024-12-31T23:59:59Z\",\n  \"remarks\": \"Multiple items quotation with old metal exchange\",\n  \"sendEmail\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Quotation with GST (Pakka Bill)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": 1,\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"itemCode\": \"ITEM001\",\n      \"rfidCode\": \"RFID001\",\n      \"grossWeight\": 10.500,\n      \"stoneWeight\": 0.500,\n      \"netWeight\": 10.000,\n      \"goldRate\": 5500.00,\n      \"making\": 500.00,\n      \"makingType\": \"Fixed\",\n      \"stoneAmount\": 5000.00,\n      \"quantity\": 1,\n      \"remarks\": \"GST applicable item\"\n    }\n  ],\n  \"oldMetalWeight\": null,\n  \"oldMetalRate\": null,\n  \"oldMetalAmount\": null,\n  \"paymentMode\": \"Card\",\n  \"isGstApplied\": true,\n  \"gstPercentage\": 3.00,\n  \"validUntil\": \"2024-12-31T23:59:59Z\",\n  \"remarks\": \"Pakka Bill - GST 3% applied\",\n  \"sendEmail\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Quotation with Making Percentage",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": 1,\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"itemCode\": \"ITEM001\",\n      \"rfidCode\": \"RFID001\",\n      \"grossWeight\": 10.500,\n      \"stoneWeight\": 0.500,\n      \"netWeight\": 10.000,\n      \"goldRate\": 5500.00,\n      \"making\": 15.00,\n      \"makingType\": \"Percentage\",\n      \"stoneAmount\": 5000.00,\n      \"quantity\": 1,\n      \"remarks\": \"Making charge 15% of metal amount\"\n    }\n  ],\n  \"oldMetalWeight\": null,\n  \"oldMetalRate\": null,\n  \"oldMetalAmount\": null,\n  \"paymentMode\": \"Cash\",\n  \"isGstApplied\": false,\n  \"gstPercentage\": 3.00,\n  \"validUntil\": \"2024-12-31T23:59:59Z\",\n  \"remarks\": \"Percentage based making charge\",\n  \"sendEmail\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Quotation",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"itemCode\": \"ITEM001\",\n      \"rfidCode\": \"RFID001\",\n      \"grossWeight\": 10.500,\n      \"stoneWeight\": 0.500,\n      \"netWeight\": 10.000,\n      \"goldRate\": 5600.00,\n      \"making\": 600.00,\n      \"makingType\": \"Fixed\",\n      \"stoneAmount\": 5500.00,\n      \"quantity\": 1,\n      \"remarks\": \"Updated rates\"\n    }\n  ],\n  \"oldMetalWeight\": null,\n  \"oldMetalRate\": null,\n  \"oldMetalAmount\": null,\n  \"paymentMode\": \"Card\",\n  \"isGstApplied\": true,\n  \"gstPercentage\": 3.00,\n  \"validUntil\": \"2024-12-31T23:59:59Z\",\n  \"status\": \"Sent\",\n  \"remarks\": \"Updated quotation with new rates\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation/{{quotationId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation", "{{quotationId}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Quotation",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation/{{quotationId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation", "{{quotationId}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Quotation Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"toEmail\": null,\n  \"additionalMessage\": \"Thank you for your interest. Please review the quotation and let us know if you have any questions.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation/{{quotationId}}/send-email",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation", "{{quotationId}}", "send-email"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Quotation Email to Custom Address",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"toEmail\": \"custom@example.com\",\n  \"additionalMessage\": \"Please find attached the quotation for your review.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Quotation/{{quotationId}}/send-email",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Quotation", "{{quotationId}}", "send-email"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🔔 Webhook Management",
+			"item": [
+				{
+					"name": "Subscribe to Webhook Events",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"eventType\": \"quotation.*\",\n  \"webhookUrl\": \"https://your-app.com/webhooks/quotation\",\n  \"secretKey\": \"your-secret-key-here\",\n  \"description\": \"Subscribe to all quotation events\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Webhook/subscribe",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Webhook", "subscribe"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to Product Bulk Upload Events",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"eventType\": \"product.bulk_upload.completed\",\n  \"webhookUrl\": \"https://your-app.com/webhooks/product-upload\",\n  \"secretKey\": \"your-secret-key-here\",\n  \"description\": \"Get notified when bulk product upload completes\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/Webhook/subscribe",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Webhook", "subscribe"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Webhook Subscriptions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Webhook/subscriptions",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Webhook", "subscriptions"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subscriptions by Event Type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Webhook/subscriptions?eventType=quotation.created",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Webhook", "subscriptions"],
+							"query": [
+								{
+									"key": "eventType",
+									"value": "quotation.created"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unsubscribe from Webhook",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Webhook/subscriptions/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Webhook", "subscriptions", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Webhook Event History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Webhook/events?page=1&pageSize=50",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Webhook", "events"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Webhook Events by Type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Webhook/events?eventType=quotation.created&page=1&pageSize=50",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Webhook", "events"],
+							"query": [
+								{
+									"key": "eventType",
+									"value": "quotation.created"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retry Failed Webhooks",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/Webhook/retry-failed",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "Webhook", "retry-failed"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "🗄️ Database Management",
 			"item": [
 				{
@@ -10346,6 +11029,16 @@
 		},
 		{
 			"key": "transferId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customerId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "quotationId",
 			"value": "",
 			"type": "string"
 		}

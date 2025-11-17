@@ -1,0 +1,36 @@
+{
+  "name": "Create Invoice",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Invoice",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"productId\": 1,\n  \"rfidCode\": \"RFID001\",\n  \"customerName\": \"John Smith\",\n  \"customerPhone\": \"+91-9876543210\",\n  \"sellingPrice\": 95000.00,\n  \"discountAmount\": 5000.00,\n  \"finalAmount\": 90000.00,\n  \"isGstApplied\": false,\n  \"gstPercentage\": 3.00,\n  \"invoiceType\": \"Sale\",\n  \"paymentMethod\": \"Cash\",\n  \"soldOn\": \"2024-01-15T10:00:00Z\",\n  \"remarks\": \"Kaccha Bill - No GST applied\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"productId\": 1,\n  \"rfidCode\": \"RFID001\",\n  \"customerName\": \"John Smith\",\n  \"customerPhone\": \"+91-9876543210\",\n  \"sellingPrice\": 95000.00,\n  \"discountAmount\": 5000.00,\n  \"finalAmount\": 90000.00,\n  \"isGstApplied\": false,\n  \"gstPercentage\": 3.00,\n  \"invoiceType\": \"Sale\",\n  \"paymentMethod\": \"Cash\",\n  \"soldOn\": \"2024-01-15T10:00:00Z\",\n  \"remarks\": \"Kaccha Bill - No GST applied\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

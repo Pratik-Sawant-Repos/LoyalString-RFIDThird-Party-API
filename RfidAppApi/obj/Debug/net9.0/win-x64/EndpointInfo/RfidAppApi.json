@@ -2072,6 +2072,235 @@
         }
       }
     },
+    "/api/Customer": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Get all customers",
+        "operationId": "Customer_GetAllCustomers",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Create a new customer",
+        "operationId": "Customer_CreateCustomer",
+        "requestBody": {
+          "x-name": "createDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCustomerDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Customer/{id}": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Get customer by ID",
+        "operationId": "Customer_GetCustomerById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Update customer information",
+        "operationId": "Customer_UpdateCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "updateDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCustomerDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Delete a customer (soft delete)",
+        "operationId": "Customer_DeleteCustomer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Customer/search": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Search customers by name or email",
+        "operationId": "Customer_SearchCustomers",
+        "parameters": [
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Dashboard/summary": {
       "get": {
         "tags": [
@@ -5976,6 +6205,284 @@
                 "schema": {
                   "type": "string",
                   "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Quotation": {
+      "get": {
+        "tags": [
+          "Quotation"
+        ],
+        "summary": "Get all quotations",
+        "operationId": "Quotation_GetAllQuotations",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuotationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Quotation"
+        ],
+        "summary": "Create a new quotation",
+        "operationId": "Quotation_CreateQuotation",
+        "requestBody": {
+          "x-name": "createDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuotationDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuotationDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Quotation/{id}": {
+      "get": {
+        "tags": [
+          "Quotation"
+        ],
+        "summary": "Get quotation by ID",
+        "operationId": "Quotation_GetQuotationById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuotationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Quotation"
+        ],
+        "summary": "Update a quotation",
+        "operationId": "Quotation_UpdateQuotation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "updateDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQuotationDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuotationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Quotation"
+        ],
+        "summary": "Delete a quotation (soft delete)",
+        "operationId": "Quotation_DeleteQuotation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Quotation/customer/{customerId}": {
+      "get": {
+        "tags": [
+          "Quotation"
+        ],
+        "summary": "Get quotations by customer ID",
+        "operationId": "Quotation_GetQuotationsByCustomer",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuotationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Quotation/{id}/send-email": {
+      "post": {
+        "tags": [
+          "Quotation"
+        ],
+        "summary": "Send quotation via email",
+        "operationId": "Quotation_SendQuotationEmail",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "emailDto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendQuotationEmailDto"
+              }
+            }
+          },
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -13101,6 +13608,169 @@
           }
         }
       }
+    },
+    "/api/Webhook/subscribe": {
+      "post": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "Subscribe to webhook events",
+        "operationId": "Webhook_Subscribe",
+        "requestBody": {
+          "x-name": "subscription",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebhookSubscriptionDto"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookSubscriptionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Webhook/subscriptions": {
+      "get": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "Get all webhook subscriptions",
+        "operationId": "Webhook_GetSubscriptions",
+        "parameters": [
+          {
+            "name": "eventType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WebhookSubscriptionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Webhook/subscriptions/{id}": {
+      "delete": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "Unsubscribe from webhook events",
+        "operationId": "Webhook_Unsubscribe",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Webhook/events": {
+      "get": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "Get webhook event history",
+        "operationId": "Webhook_GetEvents",
+        "parameters": [
+          {
+            "name": "eventType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            },
+            "x-position": 2
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            },
+            "x-position": 3
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WebhookEventDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Webhook/retry-failed": {
+      "post": {
+        "tags": [
+          "Webhook"
+        ],
+        "summary": "Retry failed webhook deliveries",
+        "operationId": "Webhook_RetryFailed",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
@@ -13908,6 +14578,260 @@
           },
           "branchName": {
             "type": "string"
+          }
+        }
+      },
+      "CustomerDto": {
+        "type": "object",
+        "description": "DTO for customer response",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clientCode": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "mobileNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "alternatePhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "pinCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "customerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "gstNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateCustomerDto": {
+        "type": "object",
+        "description": "DTO for creating a new customer",
+        "additionalProperties": false,
+        "required": [
+          "customerName",
+          "email"
+        ],
+        "properties": {
+          "customerName": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "mobileNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 0,
+            "nullable": true
+          },
+          "alternatePhone": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 0,
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "pinCode": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 0,
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "customerType": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0,
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "gstNumber": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0,
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0,
+            "nullable": true
+          }
+        }
+      },
+      "UpdateCustomerDto": {
+        "type": "object",
+        "description": "DTO for updating customer information",
+        "additionalProperties": false,
+        "properties": {
+          "customerName": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0,
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "mobileNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 0,
+            "nullable": true
+          },
+          "alternatePhone": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 0,
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "pinCode": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 0,
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "customerType": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0,
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "gstNumber": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0,
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0,
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
           }
         }
       },
@@ -15690,6 +16614,417 @@
           },
           "isActive": {
             "type": "boolean",
+            "nullable": true
+          }
+        }
+      },
+      "QuotationDto": {
+        "type": "object",
+        "description": "DTO for quotation response",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clientCode": {
+            "type": "string"
+          },
+          "quotationNumber": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customer": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CustomerDto"
+              }
+            ]
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalGrossWeight": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "oldMetalWeight": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "oldMetalRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "oldMetalAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "paymentMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "isGstApplied": {
+            "type": "boolean"
+          },
+          "gstPercentage": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "gstAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "subTotalAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "status": {
+            "type": "string"
+          },
+          "quotationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "validUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "remarks": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuotationItemDto"
+            }
+          }
+        }
+      },
+      "QuotationItemDto": {
+        "type": "object",
+        "description": "DTO for quotation item response",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quotationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "itemCode": {
+            "type": "string"
+          },
+          "rfidCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "designName": {
+            "type": "string"
+          },
+          "purity": {
+            "type": "string"
+          },
+          "grossWeight": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "stoneWeight": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "netWeight": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "goldRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "making": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "makingType": {
+            "type": "string"
+          },
+          "stoneAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "makingAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "metalAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "itemAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remarks": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CreateQuotationDto": {
+        "type": "object",
+        "description": "DTO for creating a quotation",
+        "additionalProperties": false,
+        "required": [
+          "customerId",
+          "items"
+        ],
+        "properties": {
+          "customerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateQuotationItemDto"
+            }
+          },
+          "oldMetalWeight": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "oldMetalRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "oldMetalAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "paymentMode": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0,
+            "nullable": true
+          },
+          "isGstApplied": {
+            "type": "boolean"
+          },
+          "gstPercentage": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "validUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "remarks": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0,
+            "nullable": true
+          },
+          "sendEmail": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateQuotationItemDto": {
+        "type": "object",
+        "description": "DTO for creating a quotation item",
+        "additionalProperties": false,
+        "required": [
+          "productId",
+          "itemCode",
+          "grossWeight",
+          "netWeight"
+        ],
+        "properties": {
+          "productId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "itemCode": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0
+          },
+          "rfidCode": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0,
+            "nullable": true
+          },
+          "grossWeight": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "stoneWeight": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "netWeight": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "goldRate": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "making": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "makingType": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "stoneAmount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remarks": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0,
+            "nullable": true
+          }
+        }
+      },
+      "UpdateQuotationDto": {
+        "type": "object",
+        "description": "DTO for updating a quotation",
+        "additionalProperties": false,
+        "properties": {
+          "customerId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/CreateQuotationItemDto"
+            }
+          },
+          "oldMetalWeight": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "oldMetalRate": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "oldMetalAmount": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "paymentMode": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0,
+            "nullable": true
+          },
+          "isGstApplied": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "gstPercentage": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "validUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0,
+            "nullable": true
+          },
+          "remarks": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0,
+            "nullable": true
+          }
+        }
+      },
+      "SendQuotationEmailDto": {
+        "type": "object",
+        "description": "DTO for sending quotation via email",
+        "additionalProperties": false,
+        "required": [
+          "quotationId"
+        ],
+        "properties": {
+          "quotationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "toEmail": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true
+          },
+          "additionalMessage": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0,
             "nullable": true
           }
         }
@@ -18527,6 +19862,121 @@
           "profileCompletionPercentage": {
             "type": "number",
             "format": "double"
+          }
+        }
+      },
+      "WebhookSubscriptionDto": {
+        "type": "object",
+        "description": "DTO for webhook subscription response",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clientCode": {
+            "type": "string"
+          },
+          "eventType": {
+            "type": "string"
+          },
+          "webhookUrl": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CreateWebhookSubscriptionDto": {
+        "type": "object",
+        "description": "DTO for creating a webhook subscription",
+        "additionalProperties": false,
+        "required": [
+          "eventType",
+          "webhookUrl"
+        ],
+        "properties": {
+          "eventType": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "webhookUrl": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 500,
+            "minLength": 0
+          },
+          "secretKey": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0,
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 0,
+            "nullable": true
+          }
+        }
+      },
+      "WebhookEventDto": {
+        "type": "object",
+        "description": "DTO for webhook event history",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "clientCode": {
+            "type": "string"
+          },
+          "eventType": {
+            "type": "string"
+          },
+          "webhookUrl": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "responseStatusCode": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "retryCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deliveredOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       }

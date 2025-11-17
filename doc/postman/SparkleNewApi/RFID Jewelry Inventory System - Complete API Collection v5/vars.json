@@ -1,0 +1,50 @@
+{
+  "baseUrl": {
+    "value": "https://localhost:7107",
+    "type": "string",
+    "id": 0,
+    "isSecret": false
+  },
+  "authToken": {
+    "value": "",
+    "type": "string",
+    "id": 1,
+    "isSecret": false
+  },
+  "clientCode": {
+    "value": "",
+    "type": "string",
+    "id": 2,
+    "isSecret": false
+  },
+  "userId": {
+    "value": "",
+    "type": "string",
+    "id": 3,
+    "isSecret": false
+  },
+  "productId": {
+    "value": "",
+    "type": "string",
+    "id": 4,
+    "isSecret": false
+  },
+  "imageId": {
+    "value": "",
+    "type": "string",
+    "id": 5,
+    "isSecret": false
+  },
+  "invoiceId": {
+    "value": "",
+    "type": "string",
+    "id": 6,
+    "isSecret": false
+  },
+  "transferId": {
+    "value": "",
+    "type": "string",
+    "id": 7,
+    "isSecret": false
+  }
+}

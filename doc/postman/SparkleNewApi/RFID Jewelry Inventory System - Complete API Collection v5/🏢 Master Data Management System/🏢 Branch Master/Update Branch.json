@@ -1,0 +1,36 @@
+{
+  "name": "Update Branch",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/MasterData/branches",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"branchId\": 1,\n  \"branchName\": \"Main Branch - Downtown\",\n  \"clientCode\": \"{{clientCode}}\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"branchId\": 1,\n  \"branchName\": \"Main Branch - Downtown\",\n  \"clientCode\": \"{{clientCode}}\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Register Sub-User (Under Admin)",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Admin/register-sub-user",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": "if (rq.response.code === 201) {\n    const response = rq.response.json();\n    if (response.success && response.data && response.data.userId) {\n        rq.environment.set('subUserId', response.data.userId);\n        console.log('✅', response.message);\n        console.log('Sub-user registered successfully with ID:', response.data.userId);\n        console.log('📧 Emails sent automatically:');\n        console.log('   - ✨ Welcome email sent to:', response.data.email);\n        console.log('   - 📧 Notification email sent to admin');\n        console.log('   - Check inboxes for beautiful Sparkle RFID Dashboard emails!');\n    } else {\n        console.error('❌ Unexpected response format:', response);\n    }\n} else if (rq.response.code === 400 || rq.response.code === 403) {\n    const error = rq.response.json();\n    console.error('❌', error.message || 'Request failed');\n    if (error.errors) {\n        console.error('Validation errors:', error.errors);\n    }\n}"
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"userName\": \"user1@jewelrystore.com\",\n  \"email\": \"user1@jewelrystore.com\",\n  \"password\": \"User@123\",\n  \"fullName\": \"John User\",\n  \"mobileNumber\": \"+91-9876543212\",\n  \"city\": \"Mumbai\",\n  \"address\": \"789 User Street, Mumbai, Maharashtra, India\",\n  \"organisationName\": \"Premium Jewelry Store\",\n  \"showroomType\": \"Premium\",\n  \"isAdmin\": false,\n  \"branchId\": 1,\n  \"counterId\": 1,\n  \"permissions\": [\n    {\n      \"module\": \"Product\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    },\n    {\n      \"module\": \"RFID\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    },\n    {\n      \"module\": \"Invoice\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    }\n  ]\n}",
+    "bodyContainer": {
+      "text": "{\n  \"userName\": \"user1@jewelrystore.com\",\n  \"email\": \"user1@jewelrystore.com\",\n  \"password\": \"User@123\",\n  \"fullName\": \"John User\",\n  \"mobileNumber\": \"+91-9876543212\",\n  \"city\": \"Mumbai\",\n  \"address\": \"789 User Street, Mumbai, Maharashtra, India\",\n  \"organisationName\": \"Premium Jewelry Store\",\n  \"showroomType\": \"Premium\",\n  \"isAdmin\": false,\n  \"branchId\": 1,\n  \"counterId\": 1,\n  \"permissions\": [\n    {\n      \"module\": \"Product\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    },\n    {\n      \"module\": \"RFID\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    },\n    {\n      \"module\": \"Invoice\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    }\n  ]\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

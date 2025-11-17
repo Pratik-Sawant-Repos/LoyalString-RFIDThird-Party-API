@@ -1,0 +1,36 @@
+{
+  "name": "Reject Transfer",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/StockTransfer/1/reject",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"rejectedBy\": \"manager@company.com\",\n  \"rejectionReason\": \"Insufficient stock at source\",\n  \"remarks\": \"Source location has low inventory\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"rejectedBy\": \"manager@company.com\",\n  \"rejectionReason\": \"Insufficient stock at source\",\n  \"remarks\": \"Source location has low inventory\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

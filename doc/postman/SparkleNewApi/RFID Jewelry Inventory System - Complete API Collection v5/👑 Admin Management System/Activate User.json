@@ -1,0 +1,36 @@
+{
+  "name": "Activate User",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Admin/activate-user",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"userId\": {{subUserId}},\n  \"isActive\": true,\n  \"remarks\": \"User reactivated after review\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"userId\": {{subUserId}},\n  \"isActive\": true,\n  \"remarks\": \"User reactivated after review\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

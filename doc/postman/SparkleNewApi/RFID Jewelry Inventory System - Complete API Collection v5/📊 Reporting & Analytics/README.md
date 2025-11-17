@@ -1,0 +1,1 @@
+Comprehensive reporting APIs for stock movements, sales reports, stock summaries, daily balances, RFID usage, and exports

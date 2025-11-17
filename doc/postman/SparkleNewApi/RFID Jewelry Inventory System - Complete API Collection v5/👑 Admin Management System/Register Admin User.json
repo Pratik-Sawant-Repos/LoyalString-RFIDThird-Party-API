@@ -1,0 +1,36 @@
+{
+  "name": "Register Admin User",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Admin/register-admin",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": "if (rq.response.code === 201) {\n    const response = rq.response.json();\n    if (response.success && response.data && response.data.userId) {\n        rq.environment.set('adminUserId', response.data.userId);\n        console.log('✅', response.message);\n        console.log('Admin user registered successfully with ID:', response.data.userId);\n        console.log('📧 Emails sent automatically:');\n        console.log('   - ✨ Welcome email sent to:', response.data.email);\n        console.log('   - 📧 Notification email sent to main admin');\n    } else {\n        console.error('❌ Unexpected response format:', response);\n    }\n} else if (rq.response.code === 400 || rq.response.code === 403) {\n    const error = rq.response.json();\n    console.error('❌', error.message || 'Request failed');\n    if (error.errors) {\n        console.error('Validation errors:', error.errors);\n    }\n}"
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"userName\": \"admin2@jewelrystore.com\",\n  \"email\": \"admin2@jewelrystore.com\",\n  \"password\": \"Admin@123\",\n  \"fullName\": \"Jane Admin\",\n  \"mobileNumber\": \"+91-9876543211\",\n  \"city\": \"Mumbai\",\n  \"address\": \"456 Admin Street, Mumbai, Maharashtra, India\",\n  \"organisationName\": \"Premium Jewelry Store\",\n  \"showroomType\": \"Premium\",\n  \"isAdmin\": true,\n  \"userType\": \"Admin\",\n  \"adminUserId\": null\n}",
+    "bodyContainer": {
+      "text": "{\n  \"userName\": \"admin2@jewelrystore.com\",\n  \"email\": \"admin2@jewelrystore.com\",\n  \"password\": \"Admin@123\",\n  \"fullName\": \"Jane Admin\",\n  \"mobileNumber\": \"+91-9876543211\",\n  \"city\": \"Mumbai\",\n  \"address\": \"456 Admin Street, Mumbai, Maharashtra, India\",\n  \"organisationName\": \"Premium Jewelry Store\",\n  \"showroomType\": \"Premium\",\n  \"isAdmin\": true,\n  \"userType\": \"Admin\",\n  \"adminUserId\": null\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

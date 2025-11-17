@@ -1,0 +1,36 @@
+{
+  "name": "Create Box",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/MasterData/boxes",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"boxName\": \"Premium Wooden Box\",\n  \"description\": \"High quality wooden jewelry box\",\n  \"boxType\": \"Wooden\",\n  \"size\": \"Medium\",\n  \"color\": \"Brown\",\n  \"material\": \"Wood\",\n  \"isActive\": true\n}",
+    "bodyContainer": {
+      "text": "{\n  \"boxName\": \"Premium Wooden Box\",\n  \"description\": \"High quality wooden jewelry box\",\n  \"boxType\": \"Wooden\",\n  \"size\": \"Medium\",\n  \"color\": \"Brown\",\n  \"material\": \"Wood\",\n  \"isActive\": true\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

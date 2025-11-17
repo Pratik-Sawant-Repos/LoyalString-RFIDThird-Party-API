@@ -1,0 +1,36 @@
+{
+  "name": "Create Stock Movement",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Reporting/stock-movements",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"productId\": 1,\n  \"rfidCode\": \"RFID001\",\n  \"movementType\": \"Addition\",\n  \"quantity\": 1,\n  \"unitPrice\": 95000.00,\n  \"totalAmount\": 95000.00,\n  \"referenceNumber\": \"PO-2024-001\",\n  \"referenceType\": \"Purchase Order\",\n  \"remarks\": \"Initial stock addition\",\n  \"movementDate\": \"2024-01-15T10:00:00Z\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"productId\": 1,\n  \"rfidCode\": \"RFID001\",\n  \"movementType\": \"Addition\",\n  \"quantity\": 1,\n  \"unitPrice\": 95000.00,\n  \"totalAmount\": 95000.00,\n  \"referenceNumber\": \"PO-2024-001\",\n  \"referenceType\": \"Purchase Order\",\n  \"remarks\": \"Initial stock addition\",\n  \"movementDate\": \"2024-01-15T10:00:00Z\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

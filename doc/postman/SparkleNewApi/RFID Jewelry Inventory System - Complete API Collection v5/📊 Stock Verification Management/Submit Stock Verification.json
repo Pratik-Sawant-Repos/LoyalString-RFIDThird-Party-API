@@ -1,0 +1,36 @@
+{
+  "name": "Submit Stock Verification",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/StockVerification/submit-verification",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"stockVerificationId\": 1,\n  \"matchedItemCodes\": [\"GPD1\", \"GPD2\", \"GPD3\"],\n  \"unmatchedItemCodes\": [\"GPD4\", \"GPD5\"],\n  \"scannedBy\": \"Jane Smith\",\n  \"remarks\": \"Scanned items from counter 1\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"stockVerificationId\": 1,\n  \"matchedItemCodes\": [\"GPD1\", \"GPD2\", \"GPD3\"],\n  \"unmatchedItemCodes\": [\"GPD4\", \"GPD5\"],\n  \"scannedBy\": \"Jane Smith\",\n  \"remarks\": \"Scanned items from counter 1\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

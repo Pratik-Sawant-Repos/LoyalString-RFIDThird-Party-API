@@ -32,6 +32,13 @@ namespace RfidAppApi.Data
         public DbSet<StockVerificationDetail> StockVerificationDetails { get; set; }
         public DbSet<StockTransfer> StockTransfers { get; set; }
         public DbSet<ProductCustomField> ProductCustomFields { get; set; } = null!;
+        
+        // Customer Management (separate table for future modules)
+        public DbSet<Customer> Customers { get; set; }
+        
+        // Quotation Management
+        public DbSet<Quotation> Quotations { get; set; }
+        public DbSet<QuotationItem> QuotationItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +64,9 @@ namespace RfidAppApi.Data
             modelBuilder.Entity<StockVerificationDetail>().ToTable("tblStockVerificationDetail");
             modelBuilder.Entity<StockTransfer>().ToTable("tblStockTransfer");
             modelBuilder.Entity<ProductCustomField>().ToTable("tblProductCustomFields");
+            modelBuilder.Entity<Customer>().ToTable("tblCustomer");
+            modelBuilder.Entity<Quotation>().ToTable("tblQuotation");
+            modelBuilder.Entity<QuotationItem>().ToTable("tblQuotationItem");
 
             // Configure relationships
             modelBuilder.Entity<CounterMaster>()
@@ -259,6 +269,26 @@ namespace RfidAppApi.Data
                 .HasForeignKey(st => st.DestinationBoxId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Customer Relationships
+            modelBuilder.Entity<Quotation>()
+                .HasOne(q => q.Customer)
+                .WithMany(c => c.Quotations)
+                .HasForeignKey(q => q.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Quotation Relationships
+            modelBuilder.Entity<QuotationItem>()
+                .HasOne(qi => qi.Quotation)
+                .WithMany(q => q.QuotationItems)
+                .HasForeignKey(qi => qi.QuotationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<QuotationItem>()
+                .HasOne(qi => qi.Product)
+                .WithMany()
+                .HasForeignKey(qi => qi.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Global Query Filter for Client Code
             modelBuilder.Entity<Rfid>().HasQueryFilter(e => e.ClientCode == _clientCode);
             modelBuilder.Entity<ProductDetails>().HasQueryFilter(e => e.ClientCode == _clientCode);
@@ -272,6 +302,9 @@ namespace RfidAppApi.Data
             modelBuilder.Entity<StockVerification>().HasQueryFilter(e => e.ClientCode == _clientCode);
             modelBuilder.Entity<StockVerificationDetail>().HasQueryFilter(e => e.ClientCode == _clientCode);
             modelBuilder.Entity<StockTransfer>().HasQueryFilter(e => e.ClientCode == _clientCode);
+            modelBuilder.Entity<Customer>().HasQueryFilter(e => e.ClientCode == _clientCode);
+            modelBuilder.Entity<Quotation>().HasQueryFilter(e => e.ClientCode == _clientCode);
+            modelBuilder.Entity<QuotationItem>().HasQueryFilter(e => e.ClientCode == _clientCode);
 
             // HIGH PERFORMANCE INDEXES FOR LAKHS OF RECORDS
             // Master Data Indexes
@@ -649,6 +682,65 @@ namespace RfidAppApi.Data
 
             modelBuilder.Entity<ProductCustomField>()
                 .HasIndex(pcf => new { pcf.ProductDetailsId, pcf.FieldName, pcf.FieldValue });
+
+            // Customer Table - High Performance Indexes
+            modelBuilder.Entity<Customer>()
+                .HasIndex(c => new { c.ClientCode, c.Email })
+                .IsUnique();
+
+            modelBuilder.Entity<Customer>()
+                .HasIndex(c => c.ClientCode);
+
+            modelBuilder.Entity<Customer>()
+                .HasIndex(c => c.CustomerName);
+
+            modelBuilder.Entity<Customer>()
+                .HasIndex(c => c.MobileNumber);
+
+            modelBuilder.Entity<Customer>()
+                .HasIndex(c => new { c.ClientCode, c.CustomerName });
+
+            // Quotation Table - High Performance Indexes
+            modelBuilder.Entity<Quotation>()
+                .HasIndex(q => q.QuotationNumber)
+                .IsUnique();
+
+            modelBuilder.Entity<Quotation>()
+                .HasIndex(q => q.CustomerId);
+
+            modelBuilder.Entity<Quotation>()
+                .HasIndex(q => q.QuotationDate);
+
+            modelBuilder.Entity<Quotation>()
+                .HasIndex(q => q.Status);
+
+            modelBuilder.Entity<Quotation>()
+                .HasIndex(q => q.CreatedOn);
+
+            modelBuilder.Entity<Quotation>()
+                .HasIndex(q => new { q.ClientCode, q.QuotationDate });
+
+            modelBuilder.Entity<Quotation>()
+                .HasIndex(q => new { q.CustomerId, q.Status });
+
+            modelBuilder.Entity<Quotation>()
+                .HasIndex(q => new { q.Status, q.QuotationDate });
+
+            // Quotation Item Table - High Performance Indexes
+            modelBuilder.Entity<QuotationItem>()
+                .HasIndex(qi => qi.QuotationId);
+
+            modelBuilder.Entity<QuotationItem>()
+                .HasIndex(qi => qi.ProductId);
+
+            modelBuilder.Entity<QuotationItem>()
+                .HasIndex(qi => qi.ItemCode);
+
+            modelBuilder.Entity<QuotationItem>()
+                .HasIndex(qi => qi.RfidCode);
+
+            modelBuilder.Entity<QuotationItem>()
+                .HasIndex(qi => new { qi.QuotationId, qi.ProductId });
         }
     }
 } 

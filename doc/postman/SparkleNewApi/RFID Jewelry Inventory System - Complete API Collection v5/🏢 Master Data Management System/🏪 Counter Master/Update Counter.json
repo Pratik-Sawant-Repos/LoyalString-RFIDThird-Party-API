@@ -1,0 +1,36 @@
+{
+  "name": "Update Counter",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/MasterData/counters",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"counterId\": 1,\n  \"counterName\": \"Premium Counter 1\",\n  \"branchId\": 1,\n  \"clientCode\": \"{{clientCode}}\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"counterId\": 1,\n  \"counterName\": \"Premium Counter 1\",\n  \"branchId\": 1,\n  \"clientCode\": \"{{clientCode}}\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

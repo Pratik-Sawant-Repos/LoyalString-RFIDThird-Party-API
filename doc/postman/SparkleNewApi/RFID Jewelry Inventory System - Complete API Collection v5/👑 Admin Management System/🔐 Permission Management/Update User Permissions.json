@@ -1,0 +1,36 @@
+{
+  "name": "Update User Permissions",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Admin/users/{{subUserId}}/permissions",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": "if (rq.response.code === 200) {\n    const response = rq.response.json();\n    if (response.success) {\n        console.log('✅', response.message);\n    }\n} else if (rq.response.code === 400 || rq.response.code === 401 || rq.response.code === 403 || rq.response.code === 404) {\n    const error = rq.response.json();\n    console.error('❌', error.message || 'Request failed');\n    if (error.errors) {\n        console.error('Validation errors:', error.errors);\n    }\n}"
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "[\n  {\n    \"module\": \"Product\",\n    \"canView\": true,\n    \"canCreate\": true,\n    \"canEdit\": true,\n    \"canDelete\": true,\n    \"canExport\": true,\n    \"canImport\": true\n  },\n  {\n    \"module\": \"RFID\",\n    \"canView\": true,\n    \"canCreate\": true,\n    \"canEdit\": true,\n    \"canDelete\": false,\n    \"canExport\": true,\n    \"canImport\": true\n  },\n  {\n    \"module\": \"Invoice\",\n    \"canView\": true,\n    \"canCreate\": true,\n    \"canEdit\": true,\n    \"canDelete\": false,\n    \"canExport\": true,\n    \"canImport\": false\n  }\n]",
+    "bodyContainer": {
+      "text": "[\n  {\n    \"module\": \"Product\",\n    \"canView\": true,\n    \"canCreate\": true,\n    \"canEdit\": true,\n    \"canDelete\": true,\n    \"canExport\": true,\n    \"canImport\": true\n  },\n  {\n    \"module\": \"RFID\",\n    \"canView\": true,\n    \"canCreate\": true,\n    \"canEdit\": true,\n    \"canDelete\": false,\n    \"canExport\": true,\n    \"canImport\": true\n  },\n  {\n    \"module\": \"Invoice\",\n    \"canView\": true,\n    \"canCreate\": true,\n    \"canEdit\": true,\n    \"canDelete\": false,\n    \"canExport\": true,\n    \"canImport\": false\n  }\n]"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

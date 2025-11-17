@@ -1,0 +1,36 @@
+{
+  "name": "Create Bulk Stock Movements",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Reporting/stock-movements/bulk",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"movements\": [\n    {\n      \"productId\": 1,\n      \"movementType\": \"Addition\",\n      \"quantity\": 1,\n      \"unitPrice\": 50000.00\n    },\n    {\n      \"productId\": 2,\n      \"movementType\": \"Addition\",\n      \"quantity\": 1,\n      \"unitPrice\": 75000.00\n    }\n  ],\n  \"movementDate\": \"2024-01-15T10:00:00Z\",\n  \"remarks\": \"Bulk stock addition\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"movements\": [\n    {\n      \"productId\": 1,\n      \"movementType\": \"Addition\",\n      \"quantity\": 1,\n      \"unitPrice\": 50000.00\n    },\n    {\n      \"productId\": 2,\n      \"movementType\": \"Addition\",\n      \"quantity\": 1,\n      \"unitPrice\": 75000.00\n    }\n  ],\n  \"movementDate\": \"2024-01-15T10:00:00Z\",\n  \"remarks\": \"Bulk stock addition\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

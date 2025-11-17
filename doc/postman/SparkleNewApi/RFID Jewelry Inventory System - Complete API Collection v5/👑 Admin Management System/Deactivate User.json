@@ -1,0 +1,36 @@
+{
+  "name": "Deactivate User",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Admin/deactivate-user",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"userId\": {{subUserId}},\n  \"isActive\": false,\n  \"remarks\": \"User deactivated due to policy violation\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"userId\": {{subUserId}},\n  \"isActive\": false,\n  \"remarks\": \"User deactivated due to policy violation\"\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

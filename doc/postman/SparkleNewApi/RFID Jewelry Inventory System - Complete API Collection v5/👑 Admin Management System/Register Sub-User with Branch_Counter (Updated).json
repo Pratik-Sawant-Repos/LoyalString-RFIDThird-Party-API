@@ -1,0 +1,36 @@
+{
+  "name": "Register Sub-User with Branch_Counter (Updated)",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Admin/register-sub-user",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": "if (rq.response.code === 201) {\n    const response = rq.response.json();\n    if (response.userId) {\n        rq.environment.set('counterUserId', response.userId);\n        console.log('Counter user registered successfully with ID:', response.userId);\n        console.log('Assigned to Branch ID:', response.branchId, 'Counter ID:', response.counterId);\n        console.log('📧 Emails sent automatically:');\n        console.log('   - ✨ Welcome email sent to:', response.email);\n        console.log('   - 📧 Notification email sent to admin');\n    }\n}"
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"userName\": \"counter_user@jewelrystore.com\",\n  \"email\": \"counter_user@jewelrystore.com\",\n  \"password\": \"User@123\",\n  \"fullName\": \"Counter User\",\n  \"mobileNumber\": \"+91-9876543213\",\n  \"city\": \"Mumbai\",\n  \"address\": \"101 Counter Street, Mumbai, Maharashtra, India\",\n  \"showroomType\": \"Premium\",\n  \"isAdmin\": false,\n  \"branchId\": {{branchId}},\n  \"counterId\": {{counterId}},\n  \"permissions\": [\n    {\n      \"module\": \"Product\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    },\n    {\n      \"module\": \"RFID\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    },\n    {\n      \"module\": \"Invoice\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    }\n  ]\n}",
+    "bodyContainer": {
+      "text": "{\n  \"userName\": \"counter_user@jewelrystore.com\",\n  \"email\": \"counter_user@jewelrystore.com\",\n  \"password\": \"User@123\",\n  \"fullName\": \"Counter User\",\n  \"mobileNumber\": \"+91-9876543213\",\n  \"city\": \"Mumbai\",\n  \"address\": \"101 Counter Street, Mumbai, Maharashtra, India\",\n  \"showroomType\": \"Premium\",\n  \"isAdmin\": false,\n  \"branchId\": {{branchId}},\n  \"counterId\": {{counterId}},\n  \"permissions\": [\n    {\n      \"module\": \"Product\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    },\n    {\n      \"module\": \"RFID\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    },\n    {\n      \"module\": \"Invoice\",\n      \"canView\": true,\n      \"canCreate\": true,\n      \"canEdit\": true,\n      \"canDelete\": false,\n      \"canExport\": true,\n      \"canImport\": false\n    }\n  ]\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

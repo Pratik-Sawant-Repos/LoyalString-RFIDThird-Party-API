@@ -1,0 +1,36 @@
+{
+  "name": "Update Product",
+  "request": {
+    "type": "http",
+    "url": "{{baseUrl}}/api/Product/{{productId}}",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [
+      {
+        "id": 0,
+        "key": "Authorization",
+        "value": "Bearer {{authToken}}",
+        "isEnabled": true
+      },
+      {
+        "id": 1,
+        "key": "Content-Type",
+        "value": "application/json",
+        "isEnabled": true
+      }
+    ],
+    "body": "{\n  \"mrp\": 70000,\n  \"status\": \"Active\",\n  \"boxDetails\": \"Updated premium velvet box with certificate\",\n  \"customFields\": {\n    \"Ring Size\": \"8\",\n    \"Band Width\": \"5mm\",\n    \"Setting Type\": \"Bezel\",\n    \"Has Certificate\": \"true\",\n    \"Certificate Number\": \"CERT-2024-002\",\n    \"Updated Notes\": \"Updated with new certificate\"\n  }\n}",
+    "bodyContainer": {
+      "text": "{\n  \"mrp\": 70000,\n  \"status\": \"Active\",\n  \"boxDetails\": \"Updated premium velvet box with certificate\",\n  \"customFields\": {\n    \"Ring Size\": \"8\",\n    \"Band Width\": \"5mm\",\n    \"Setting Type\": \"Bezel\",\n    \"Has Certificate\": \"true\",\n    \"Certificate Number\": \"CERT-2024-002\",\n    \"Updated Notes\": \"Updated with new certificate\"\n  }\n}"
+    },
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

@@ -305,6 +305,41 @@
             DTO for deactivating user
             </summary>
         </member>
+        <member name="T:RfidAppApi.Controllers.CustomerController">
+            <summary>
+            Controller for customer management
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.CustomerController.GetAllCustomers">
+            <summary>
+            Get all customers
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.CustomerController.GetCustomerById(System.Int32)">
+            <summary>
+            Get customer by ID
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.CustomerController.SearchCustomers(System.String)">
+            <summary>
+            Search customers by name or email
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.CustomerController.CreateCustomer(RfidAppApi.DTOs.CreateCustomerDto)">
+            <summary>
+            Create a new customer
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.CustomerController.UpdateCustomer(System.Int32,RfidAppApi.DTOs.UpdateCustomerDto)">
+            <summary>
+            Update customer information
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.CustomerController.DeleteCustomer(System.Int32)">
+            <summary>
+            Delete a customer (soft delete)
+            </summary>
+        </member>
         <member name="T:RfidAppApi.Controllers.DashboardController">
             <summary>
             Controller for dashboard analytics and reporting
@@ -916,6 +951,46 @@
         <member name="M:RfidAppApi.Controllers.ProductImageController.ValidateImage(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Validate image file
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Controllers.QuotationController">
+            <summary>
+            Controller for quotation management
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.QuotationController.GetAllQuotations">
+            <summary>
+            Get all quotations
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.QuotationController.GetQuotationById(System.Int32)">
+            <summary>
+            Get quotation by ID
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.QuotationController.GetQuotationsByCustomer(System.Int32)">
+            <summary>
+            Get quotations by customer ID
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.QuotationController.CreateQuotation(RfidAppApi.DTOs.CreateQuotationDto)">
+            <summary>
+            Create a new quotation
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.QuotationController.UpdateQuotation(System.Int32,RfidAppApi.DTOs.UpdateQuotationDto)">
+            <summary>
+            Update a quotation
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.QuotationController.DeleteQuotation(System.Int32)">
+            <summary>
+            Delete a quotation (soft delete)
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.QuotationController.SendQuotationEmail(System.Int32,RfidAppApi.DTOs.SendQuotationEmailDto)">
+            <summary>
+            Send quotation via email
             </summary>
         </member>
         <member name="T:RfidAppApi.Controllers.ReportingController">
@@ -2047,6 +2122,36 @@
             <param name="userId">User ID</param>
             <returns>User profile</returns>
         </member>
+        <member name="T:RfidAppApi.Controllers.WebhookController">
+            <summary>
+            Controller for webhook subscription and management
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.WebhookController.Subscribe(RfidAppApi.DTOs.CreateWebhookSubscriptionDto)">
+            <summary>
+            Subscribe to webhook events
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.WebhookController.GetSubscriptions(System.String)">
+            <summary>
+            Get all webhook subscriptions
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.WebhookController.Unsubscribe(System.Int32)">
+            <summary>
+            Unsubscribe from webhook events
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.WebhookController.GetEvents(System.String,System.Int32,System.Int32)">
+            <summary>
+            Get webhook event history
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Controllers.WebhookController.RetryFailed">
+            <summary>
+            Retry failed webhook deliveries
+            </summary>
+        </member>
         <member name="T:RfidAppApi.DTOs.AdminUserDto">
             <summary>
             DTO for admin user management
@@ -2135,6 +2240,21 @@
         <member name="T:RfidAppApi.DTOs.UserHierarchyItem">
             <summary>
             DTO for user hierarchy item
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.CreateCustomerDto">
+            <summary>
+            DTO for creating a new customer
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.UpdateCustomerDto">
+            <summary>
+            DTO for updating customer information
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.CustomerDto">
+            <summary>
+            DTO for customer response
             </summary>
         </member>
         <member name="T:RfidAppApi.DTOs.DashboardDto">
@@ -2250,6 +2370,36 @@
         <member name="T:RfidAppApi.DTOs.UserFriendlyUpdateProductWithImagesDto">
             <summary>
             DTO for product update with images
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.CreateQuotationItemDto">
+            <summary>
+            DTO for creating a quotation item
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.CreateQuotationDto">
+            <summary>
+            DTO for creating a quotation
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.UpdateQuotationDto">
+            <summary>
+            DTO for updating a quotation
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.QuotationItemDto">
+            <summary>
+            DTO for quotation item response
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.QuotationDto">
+            <summary>
+            DTO for quotation response
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.SendQuotationEmailDto">
+            <summary>
+            DTO for sending quotation via email
             </summary>
         </member>
         <member name="T:RfidAppApi.DTOs.StockMovementDto">
@@ -3283,6 +3433,26 @@
             Enhanced DTO for invoice response with multiple payment methods
             </summary>
         </member>
+        <member name="T:RfidAppApi.DTOs.CreateWebhookSubscriptionDto">
+            <summary>
+            DTO for creating a webhook subscription
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.WebhookSubscriptionDto">
+            <summary>
+            DTO for webhook subscription response
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.WebhookEventDto">
+            <summary>
+            DTO for webhook event history
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.DTOs.WebhookPayload">
+            <summary>
+            Standard webhook payload structure
+            </summary>
+        </member>
         <member name="T:RfidAppApi.Extensions.ControllerExtensions">
             <summary>
             Extension methods for controllers to handle access control
@@ -3376,6 +3546,12 @@
             Examples: "Premium Wooden Box", "Velvet Case", "Gift Box", "Travel Case"
             </summary>
         </member>
+        <member name="T:RfidAppApi.Models.Customer">
+            <summary>
+            Model for storing customer information
+            Separate table for future modules (Orders, Sales, etc.)
+            </summary>
+        </member>
         <member name="T:RfidAppApi.Models.DailyStockBalance">
             <summary>
             Model for tracking daily opening and closing stock balances
@@ -3394,6 +3570,17 @@
         <member name="T:RfidAppApi.Models.ProductImage">
             <summary>
             Model for storing product images in client database
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Models.Quotation">
+            <summary>
+            Model for storing quotation header information
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Models.QuotationItem">
+            <summary>
+            Model for storing individual items in a quotation
+            Links to products from inventory (ProductDetails)
             </summary>
         </member>
         <member name="T:RfidAppApi.Models.StockMovement">
@@ -3419,6 +3606,16 @@
         <member name="T:RfidAppApi.Models.UserProfile">
             <summary>
             User profile model for storing profile images and extended address information
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Models.WebhookEvent">
+            <summary>
+            Model for storing webhook events and their delivery status
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Models.WebhookSubscription">
+            <summary>
+            Model for webhook subscriptions (client can subscribe to specific events)
             </summary>
         </member>
         <member name="T:RfidAppApi.Services.AccessControlService">
@@ -3449,6 +3646,11 @@
         <member name="M:RfidAppApi.Services.AdminService.GetUsersByLocationAsync(System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
             Gets users by branch and counter location
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Services.CustomerService">
+            <summary>
+            Service implementation for customer management
             </summary>
         </member>
         <member name="T:RfidAppApi.Services.DashboardService">
@@ -3598,6 +3800,46 @@
         <member name="M:RfidAppApi.Services.IClientDatabaseService.GetAllClientCodesAsync">
             <summary>
             Gets all client codes from the master database
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Services.ICustomerService">
+            <summary>
+            Service interface for customer management
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.ICustomerService.GetAllCustomersAsync(System.String)">
+            <summary>
+            Get all customers for a client
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.ICustomerService.GetCustomerByIdAsync(System.Int32,System.String)">
+            <summary>
+            Get customer by ID
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.ICustomerService.GetCustomerByEmailAsync(System.String,System.String)">
+            <summary>
+            Get customer by email
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.ICustomerService.SearchCustomersAsync(System.String,System.String)">
+            <summary>
+            Search customers by name or email
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.ICustomerService.CreateCustomerAsync(RfidAppApi.DTOs.CreateCustomerDto,System.String)">
+            <summary>
+            Create a new customer
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.ICustomerService.UpdateCustomerAsync(System.Int32,RfidAppApi.DTOs.UpdateCustomerDto,System.String)">
+            <summary>
+            Update customer information
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.ICustomerService.DeleteCustomerAsync(System.Int32,System.String)">
+            <summary>
+            Delete a customer (soft delete)
             </summary>
         </member>
         <member name="T:RfidAppApi.Services.IDashboardService">
@@ -3783,6 +4025,46 @@
         <member name="M:RfidAppApi.Services.IProductExcelService.ExportAllProductsToExcelAsync(System.String)">
             <summary>
             Export all products to Excel file with all fields
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Services.IQuotationService">
+            <summary>
+            Service interface for quotation management
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IQuotationService.GetAllQuotationsAsync(System.String)">
+            <summary>
+            Get all quotations for a client
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IQuotationService.GetQuotationByIdAsync(System.Int32,System.String)">
+            <summary>
+            Get quotation by ID with all details
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IQuotationService.GetQuotationsByCustomerAsync(System.Int32,System.String)">
+            <summary>
+            Get quotations by customer ID
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IQuotationService.CreateQuotationAsync(RfidAppApi.DTOs.CreateQuotationDto,System.String)">
+            <summary>
+            Create a new quotation
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IQuotationService.UpdateQuotationAsync(System.Int32,RfidAppApi.DTOs.UpdateQuotationDto,System.String)">
+            <summary>
+            Update a quotation
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IQuotationService.DeleteQuotationAsync(System.Int32,System.String)">
+            <summary>
+            Delete a quotation (soft delete)
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IQuotationService.SendQuotationEmailAsync(System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Send quotation via email
             </summary>
         </member>
         <member name="T:RfidAppApi.Services.IReportingService">
@@ -4080,6 +4362,41 @@
             Calculate profile completion percentage
             </summary>
         </member>
+        <member name="T:RfidAppApi.Services.IWebhookService">
+            <summary>
+            Service interface for webhook management and delivery
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IWebhookService.SubscribeAsync(RfidAppApi.DTOs.CreateWebhookSubscriptionDto,System.String)">
+            <summary>
+            Subscribe to webhook events
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IWebhookService.UnsubscribeAsync(System.Int32,System.String)">
+            <summary>
+            Unsubscribe from webhook events
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IWebhookService.GetSubscriptionsAsync(System.String,System.String)">
+            <summary>
+            Get all subscriptions for a client
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IWebhookService.TriggerWebhookAsync(System.String,System.Object,System.String,System.String)">
+            <summary>
+            Trigger a webhook event (async delivery)
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IWebhookService.GetWebhookEventsAsync(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Get webhook event history
+            </summary>
+        </member>
+        <member name="M:RfidAppApi.Services.IWebhookService.RetryFailedWebhooksAsync(System.String)">
+            <summary>
+            Retry failed webhook deliveries
+            </summary>
+        </member>
         <member name="T:RfidAppApi.Services.ProductExcelService">
             <summary>
             Service for Product Excel operations including upload, processing, and template generation
@@ -4115,6 +4432,11 @@
         <member name="M:RfidAppApi.Services.ProductExcelService.ExportAllProductsToExcelAsync(System.String)">
             <summary>
             Export all products to Excel file with all fields including custom fields
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Services.QuotationService">
+            <summary>
+            Service implementation for quotation management
             </summary>
         </member>
         <member name="T:RfidAppApi.Services.ReportingService">
@@ -4222,6 +4544,12 @@
         <member name="T:RfidAppApi.Services.UserProfileService">
             <summary>
             Service for managing user profiles including profile images and extended address information
+            </summary>
+        </member>
+        <member name="T:RfidAppApi.Services.WebhookService">
+            <summary>
+            Service for webhook management and async delivery
+            Handles webhook subscriptions, event triggering, and retry logic
             </summary>
         </member>
     </members>
